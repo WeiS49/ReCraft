@@ -117,6 +117,24 @@ This decision supersedes the earlier plan for a separate fixed-English action.
 It does not admit a prompt marketplace, task-library organization, model or
 provider selection, history, sync, or another delivery mechanism.
 
+### Provider decision (2026-11-19)
+
+The owner later admitted exactly one global provider setting with two fixed
+choices, superseding "OpenAI only" wherever this document names a single
+provider or model:
+
+- Claude (default when nothing is stored, including after upgrade): Anthropic
+  Messages API with `claude-haiku-5-5`, thinking disabled, `max_tokens` 4096;
+  the task prompt is the `system` value and the selected text the only user
+  message;
+- OpenAI: the unchanged Responses API request with `gpt-5.6-luna`,
+  `reasoning.effort = none` and `store=false`.
+
+Each provider has its own Keychain item. There is no per-task provider, model
+choice, retry, or automatic fallback, and every request, privacy and logging
+rule below applies equally to both. The built-in prompts were tuned against the
+OpenAI model; their quality on Claude has not been evaluated.
+
 ## Technical Baseline
 
 - Swift 6.2 and Xcode 26.1.1.
@@ -128,8 +146,9 @@ provider selection, history, sync, or another delivery mechanism.
   raw global keyboard observation.
 - `NSPasteboard.general` plus synthetic Command-C/Command-V for the approved
   copy and replacement path.
-- System `URLSession` for OpenAI Responses API requests in Stages B and C.
-- Security framework APIs for one Keychain-backed API Key.
+- System `URLSession` for OpenAI Responses API requests in Stages B and C,
+  and for Claude Messages API requests after the 2026-11-19 provider decision.
+- Security framework APIs for one Keychain-backed API Key per provider.
 - Xcode Automatic Signing with a stable Apple Development identity for Release
   builds; disposable hosted tests may override signing to ad-hoc.
 - `OSLog` for metadata-only diagnostics.
@@ -154,7 +173,8 @@ On a shortcut:
    restore the original pasteboard and send only the explicitly invoked saved
    complete task prompt as instructions, without any shared instruction, and
    the selected text as input, in one independent,
-   non-stored OpenAI request.
+   non-stored OpenAI request, or one independent Claude request with the
+   prompt as `system`, per the provider decision above.
 5. Immediately before model delivery, require the original application and
    focused element, repeat Command-C, and compare the selected text exactly with
    the captured selection. Abort without pasting if anything changed.
@@ -207,7 +227,9 @@ undo behavior remain the runtime evidence.
   feedback attachments containing user text.
 - `store=false` disables storage of the Response for later API retrieval; it is
   not a promise of zero provider-side abuse-monitoring retention. Applicable
-  retention follows the OpenAI account's data controls and policy.
+  retention follows the OpenAI account's data controls and policy. Claude
+  requests likewise carry no tools or history; their retention follows the
+  Anthropic account's data controls and policy.
 
 ## Interaction Rules
 
@@ -311,7 +333,8 @@ demonstrated blocker without crossing the quality floor.
 
 - The approved remote baseline is Luna with `reasoning.effort = none`. Reopen
   model choice only if representative real-use evidence misses the quality or
-  latency threshold.
+  latency threshold. Since the 2026-11-19 provider decision, Claude Haiku 5.5
+  with thinking disabled is the second fixed, globally selectable baseline.
 - Reconsider Apple Foundation Models only after a new model or measured prompt
   result clears the same fidelity threshold; never add it silently as fallback.
 - Configurable tasks, prompt editing, and dedicated shortcut editing are approved
@@ -335,7 +358,8 @@ demonstrated blocker without crossing the quality floor.
 - Preset marketplaces, task categories, search, import, export, sync, sharing,
   or discovery beyond the approved small saved-task list.
 - Multiple model providers, routing, provider SDKs, and generic model
-  protocols built for hypothetical future services.
+  protocols built for hypothetical future services. (The two fixed providers
+  of the 2026-11-19 decision are the only exception.)
 - Delivery mechanisms beyond the approved Command-C/Command-V path, raw
   keyboard event monitoring, application-specific adapters, and GUI automation
   frameworks.

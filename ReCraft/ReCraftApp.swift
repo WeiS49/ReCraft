@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 @main
@@ -25,7 +26,10 @@ struct ReCraftApp: App {
         Settings {
             if !appDelegate.isRunningUnitTests {
                 TabView {
-                    RewriteTaskSettingsView(model: appDelegate.taskSettings)
+                    RewriteTaskSettingsView(
+                        model: appDelegate.taskSettings,
+                        providerSettings: appDelegate.apiKeySettings
+                    )
                         .tabItem {
                             Label("Rewrite Tasks", systemImage: "text.badge.checkmark")
                         }
@@ -49,7 +53,7 @@ struct ReCraftApp: App {
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let coordinator: AppCoordinator
-    let apiKeySettings: APIKeySettingsModel
+    let apiKeySettings: ProviderAPIKeySettingsModel
     let taskSettings: RewriteTaskSettingsModel
     let isRunningUnitTests: Bool
 
@@ -67,7 +71,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let isRunningUnitTests = Self.isUnitTestHost(
             environment: ProcessInfo.processInfo.environment
         )
-        let apiKeyStore = OpenAIAPIKeyStore()
+        let providerSetting = RewriteProviderSetting()
+        let openAIKeyStore = KeychainAPIKeyStore(provider: .openai)
+        let claudeKeyStore = KeychainAPIKeyStore(provider: .claude)
         let hotKeyRegistry = RewriteTaskHotKeyRegistry()
         let persistence = RewriteTaskCatalogPersistence(
             store: UserDefaultsRewriteTaskCatalogStore()
@@ -80,10 +86,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         )
 
         self.isRunningUnitTests = isRunningUnitTests
-        self.apiKeySettings = APIKeySettingsModel(store: apiKeyStore)
+        self.apiKeySettings = ProviderAPIKeySettingsModel(
+            setting: providerSetting,
+            claudeKeyStore: claudeKeyStore,
+            openAIKeyStore: openAIKeyStore
+        )
         self.taskSettings = taskSettings
         coordinator = AppCoordinator(
-            apiKeyStore: apiKeyStore,
+            rewriter: CodingPromptRewriter(
+                providerSetting: providerSetting,
+                openAIKeyStore: openAIKeyStore,
+                claudeKeyStore: claudeKeyStore
+            ),
+            providerSetting: providerSetting,
             hotKeyRegistry: hotKeyRegistry,
             taskSettings: taskSettings
         )
@@ -128,7 +143,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 private struct MenuContentView: View {
     @Environment(\.openSettings) private var openSettings
     @ObservedObject var coordinator: AppCoordinator
-    @ObservedObject var apiKeySettings: APIKeySettingsModel
+    @ObservedObject var apiKeySettings: ProviderAPIKeySettingsModel
     @ObservedObject var taskSettings: RewriteTaskSettingsModel
 
     var body: some View {
@@ -165,10 +180,11 @@ private struct MenuContentView: View {
 
         Divider()
 
+        Text("Rewrite provider: \(apiKeySettings.selectedProvider.displayName)")
         Text(
             apiKeySettings.isConfigured
-                ? "OpenAI API Key: Configured"
-                : "OpenAI API Key: Not configured"
+                ? "\(apiKeySettings.selectedProvider.displayName) API Key: Configured"
+                : "\(apiKeySettings.selectedProvider.displayName) API Key: Not configured"
         )
         Button("Settings…") {
             Task { @MainActor in
@@ -255,62 +271,171 @@ final class APIKeySettingsModel: ObservableObject {
     }
 }
 
+/// The global provider choice plus one Keychain key model per provider.
+/// The menu and status reflect the key of the currently selected provider.
+@MainActor
+final class ProviderAPIKeySettingsModel: ObservableObject {
+    @Published private(set) var selectedProvider: RewriteProvider
+    let claudeKey: APIKeySettingsModel
+    let openAIKey: APIKeySettingsModel
+
+    private let setting: RewriteProviderSetting
+    private var childObservations: [AnyCancellable] = []
+
+    init(
+        setting: RewriteProviderSetting,
+        claudeKeyStore: any APIKeyStoring,
+        openAIKeyStore: any APIKeyStoring
+    ) {
+        self.setting = setting
+        selectedProvider = setting.current
+        claudeKey = APIKeySettingsModel(store: claudeKeyStore)
+        openAIKey = APIKeySettingsModel(store: openAIKeyStore)
+        for child in [claudeKey, openAIKey] {
+            childObservations.append(
+                child.objectWillChange.sink { [weak self] _ in
+                    self?.objectWillChange.send()
+                }
+            )
+        }
+    }
+
+    var isConfigured: Bool {
+        keyModel(for: selectedProvider).isConfigured
+    }
+
+    var statusMessage: String? {
+        keyModel(for: selectedProvider).statusMessage
+    }
+
+    func keyModel(for provider: RewriteProvider) -> APIKeySettingsModel {
+        switch provider {
+        case .claude:
+            claudeKey
+        case .openai:
+            openAIKey
+        }
+    }
+
+    /// Persists immediately; the next shortcut uses the new provider.
+    func select(_ provider: RewriteProvider) {
+        setting.select(provider)
+        selectedProvider = provider
+    }
+
+    func refresh() async {
+        selectedProvider = setting.current
+        await claudeKey.refresh()
+        await openAIKey.refresh()
+    }
+
+    func clearDrafts() {
+        claudeKey.clearDraft()
+        openAIKey.clearDraft()
+    }
+}
+
 private struct APIKeySettingsView: View {
-    @ObservedObject var model: APIKeySettingsModel
-    @State private var isConfirmingDeletion = false
+    @ObservedObject var model: ProviderAPIKeySettingsModel
+    @State private var providerPendingDeletion: RewriteProvider?
 
     var body: some View {
         Form {
-            Section("OpenAI API Key") {
-                Text(
-                    model.isConfigured
-                        ? "An API key is stored in macOS Keychain. Enter a new key to update it."
-                        : "Enter an API key. ReCraft stores it only in macOS Keychain."
+            Section("Rewrite Provider") {
+                Picker(
+                    "Provider",
+                    selection: Binding(
+                        get: { model.selectedProvider },
+                        set: { model.select($0) }
+                    )
+                ) {
+                    ForEach(RewriteProvider.allCases) { provider in
+                        Text(provider.displayName).tag(provider)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                Text("Rewrite task shortcuts send requests only to \(model.selectedProvider.displayName), using its API key. ReCraft never falls back to the other provider.")
+                    .foregroundStyle(.secondary)
+            }
+
+            ForEach(RewriteProvider.allCases) { provider in
+                APIKeySection(
+                    provider: provider,
+                    isSelected: provider == model.selectedProvider,
+                    model: model.keyModel(for: provider),
+                    onDelete: { providerPendingDeletion = provider }
                 )
-                .foregroundStyle(.secondary)
-
-                SecureField("API key", text: $model.draftKey)
-                    .textFieldStyle(.roundedBorder)
-
-                HStack {
-                    Button(model.isConfigured ? "Update" : "Save") {
-                        Task {
-                            await model.save()
-                        }
-                    }
-                    .disabled(model.isWorking || model.draftKey.isEmpty)
-
-                    if model.isConfigured {
-                        Button("Delete API Key", role: .destructive) {
-                            isConfirmingDeletion = true
-                        }
-                        .disabled(model.isWorking)
-                    }
-                }
-
-                if let statusMessage = model.statusMessage {
-                    Text(statusMessage)
-                        .foregroundStyle(.secondary)
-                }
             }
         }
         .formStyle(.grouped)
-        .frame(width: 460, height: 240)
+        .frame(width: 460, height: 500)
         .task {
             await model.refresh()
         }
         .onDisappear {
-            model.clearDraft()
+            model.clearDrafts()
         }
         .confirmationDialog(
-            "Delete the OpenAI API key from Keychain?",
-            isPresented: $isConfirmingDeletion,
-            titleVisibility: .visible
-        ) {
+            "Delete the \(providerPendingDeletion?.displayName ?? "") API key from Keychain?",
+            isPresented: Binding(
+                get: { providerPendingDeletion != nil },
+                set: { if !$0 { providerPendingDeletion = nil } }
+            ),
+            titleVisibility: .visible,
+            presenting: providerPendingDeletion
+        ) { provider in
             Button("Delete API Key", role: .destructive) {
+                let keyModel = model.keyModel(for: provider)
                 Task {
-                    await model.delete()
+                    await keyModel.delete()
                 }
+            }
+        }
+    }
+}
+
+private struct APIKeySection: View {
+    let provider: RewriteProvider
+    let isSelected: Bool
+    @ObservedObject var model: APIKeySettingsModel
+    let onDelete: () -> Void
+
+    var body: some View {
+        Section(
+            isSelected
+                ? "\(provider.displayName) API Key (in use)"
+                : "\(provider.displayName) API Key"
+        ) {
+            Text(
+                model.isConfigured
+                    ? "Configured. The key is stored in macOS Keychain. Enter a new key to update it."
+                    : "Not configured. Enter an API key. ReCraft stores it only in macOS Keychain."
+            )
+            .foregroundStyle(.secondary)
+
+            SecureField("\(provider.displayName) API key", text: $model.draftKey)
+                .textFieldStyle(.roundedBorder)
+
+            HStack {
+                Button(model.isConfigured ? "Update" : "Save") {
+                    Task {
+                        await model.save()
+                    }
+                }
+                .disabled(model.isWorking || model.draftKey.isEmpty)
+
+                if model.isConfigured {
+                    Button("Delete API Key", role: .destructive) {
+                        onDelete()
+                    }
+                    .disabled(model.isWorking)
+                }
+            }
+
+            if let statusMessage = model.statusMessage {
+                Text(statusMessage)
+                    .foregroundStyle(.secondary)
             }
         }
     }

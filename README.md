@@ -30,7 +30,7 @@ own acceptance gate; treat them as starting points to edit.
 open "/Applications/ReCraft.app"
 ```
 
-ReCraft appears in the menu bar without a main window. Check Accessibility status there. Use **Settings… → API Key** to enter or update the Keychain-backed API Key when needed.
+ReCraft appears in the menu bar without a main window. Check Accessibility status there. Use **Settings… → API Key** to choose the rewrite provider (Claude or OpenAI; Claude when nothing has been chosen, including after an upgrade) and to enter, update or delete each provider's Keychain-backed API Key. The menu shows the selected provider and whether its key is configured. A task never falls back to the other provider: with Claude selected and no Claude key, the task stops before any request.
 
 In **Settings… → Rewrite Tasks**, select a task or **Add Task**, edit its name, complete prompt and shortcut, then **Save**. Shortcuts use A–Z with at least two modifiers; reserved or conflicting shortcuts are rejected. Tasks run directly from their shortcuts without a picker.
 
@@ -41,15 +41,19 @@ In **Settings… → Rewrite Tasks**, select a task or **Add Task**, edit its na
 | Control-Option-Command-E | Formal English |
 | Control-Option-Command-R | Local deterministic `[ReCraft] ` prefix; no API call |
 
-Existing catalogs are preserved, so names and shortcuts may differ. Model selection is unavailable: remote tasks use `gpt-5.6-luna`, effort `none`.
+Existing catalogs are preserved, so names and shortcuts may differ. Each provider has one fixed model and there is no model selection: Claude uses `claude-haiku-5-5` with thinking disabled; OpenAI uses `gpt-5.6-luna`, effort `none`. The built-in prompts were tuned against the OpenAI model and have not been evaluated on Claude.
 
 ## Privacy and delivery
 
 After an explicit shortcut, ReCraft checks Accessibility trust, the foreground
 application, the focused control, and recognized secure-field roles before it
-snapshots the clipboard in memory and copies the selection. It sends exactly
-the saved complete task prompt as instructions and only the selected text as
-input, with `store=false`, no shared instruction, tools, history or retry.
+snapshots the clipboard in memory and copies the selection. It sends one
+request, only to the selected provider, containing exactly the saved complete
+task prompt and only the selected text, with no shared instruction, tools,
+history or retry. To Claude (`api.anthropic.com/v1/messages`) the prompt is the
+`system` value and the selection the only user message; to OpenAI
+(`api.openai.com/v1/responses`) they are `instructions` and input, with
+`store=false`.
 
 Before delivery, it rechecks the original application and focused control, recopies the selection and requires an exact match. It pastes once and restores the prior clipboard only while it still owns the staged content. `Replacement sent` confirms event submission; actual replacement and Undo need visible verification.
 
@@ -58,7 +62,7 @@ unreadable representation, or a pasteboard change during capture as a safe
 refusal. It never interprets an unavailable item list as an empty clipboard and
 never overwrites newer content while trying to restore a failed stage.
 
-Accessibility is the only requested macOS privacy permission. API Keys persist only in Keychain; normal reads are noninteractive. Explicit task configuration is plaintext local preferences. Production selections, outputs and clipboard snapshots are not logged or persisted. Provider-side retention follows the account's data controls; `store=false` alone does not establish zero retention.
+Accessibility is the only requested macOS privacy permission. API Keys persist only in Keychain, one item per provider; normal reads are noninteractive. Explicit task configuration and the provider choice are plaintext local preferences. Production selections, outputs and clipboard snapshots are not logged or persisted. Provider-side retention follows the selected provider account's data controls; `store=false` alone does not establish zero retention.
 
 ## Offline verification
 

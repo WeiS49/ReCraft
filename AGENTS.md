@@ -28,11 +28,20 @@ before any request is made.
 - Build a native menu-bar app with SwiftUI, AppKit where needed,
   ApplicationServices Accessibility APIs for target validation, Carbon
   `RegisterEventHotKey`, and the approved clipboard copy/paste path.
-- Use the OpenAI Responses API through system `URLSession` with
-  `gpt-5.6-luna` and `reasoning.effort = none`.
-- Store the OpenAI API Key only in macOS Keychain. Apple Foundation Models are
-  paused and are not a fallback.
-- Use no third-party dependency or speculative provider abstraction.
+- Rewrite tasks use exactly one of two remote providers, chosen by one global
+  Settings value (owner decision 2026-11-19); without a stored choice the
+  provider is Claude. Each provider has one fixed model and request shape,
+  called through system `URLSession`:
+  - Claude: the Anthropic Messages API with `claude-haiku-5-5`,
+    `thinking` disabled and `max_tokens` 4096;
+  - OpenAI: the Responses API with `gpt-5.6-luna` and
+    `reasoning.effort = none`.
+  There is no per-task provider, model choice, retry, or automatic fallback to
+  the other provider.
+- Store each provider's API Key only in macOS Keychain, one item per provider.
+  Apple Foundation Models are paused and are not a fallback.
+- Use no third-party dependency or SDK, and no speculative provider
+  abstraction beyond the two concrete clients and their enum.
 - Disable App Sandbox because the core Accessibility behavior is incompatible
   with it. Do not target the Mac App Store in the current scope.
 - Do not casually rename the App, Bundle ID, Keychain service or log
@@ -58,15 +67,18 @@ before any request is made.
   the snapshot only while ReCraft still owns the staged content; never overwrite
   newer user clipboard content. A task request may send exactly the explicitly
   invoked saved complete task prompt as `instructions`, and the explicitly
-  selected text as input. The only user-controlled remote text is that saved
-  task prompt and selected source. Never send task names, shortcuts, unselected
-  text, surrounding content, clipboard snapshots, or prior requests, and never
-  log, persist, hash, or otherwise analyze production selected text or model
-  output.
-- Each model invocation is an independent Responses API request with
-  `store=false`, no tools, and no conversation history. The API Key must never
-  appear in logs, project files, preferences, or UI after entry; persist it only
-  in Keychain and allow the user to update or delete it.
+  selected text as input. In a Claude request the task prompt is the `system`
+  value and the selected text is the only user message. The only
+  user-controlled remote text is that saved task prompt and selected source.
+  For both providers, never send task names, shortcuts, unselected text,
+  surrounding content, clipboard snapshots, or prior requests, and never log,
+  persist, hash, or otherwise analyze production selected text or model output.
+- Each model invocation is one independent request to the selected provider
+  only: for OpenAI a Responses API request with `store=false`, for Claude a
+  single Messages API request; both have no tools and no conversation history.
+  An API Key must never appear in logs, project files, preferences, or UI after
+  entry; persist each only in Keychain and allow the user to update or delete
+  it.
 - Before model delivery, revalidate the original application and focused
   element, then repeat Command-C and require the selected text to match exactly.
   If anything changed, discard the model result without pasting.
@@ -81,8 +93,8 @@ before any request is made.
   copy and upload the current line, so that configuration is outside the remote
   support claim.
 - Logs may contain only app identifiers, element role/subrole, processing
-  stage, duration, attempt counts, Accessibility error codes and error
-  category. They must never contain user text, prompts, responses, or full
+  stage, provider name (log categories `OpenAI` and `Claude`), duration,
+  attempt counts, Accessibility error codes and error category. They must never contain user text, prompts, responses, or full
   control values.
 - Production text inspection and remote work begin only after an explicit
   registered shortcut. The Debug-only `DebugFocusProbe` may sample
@@ -99,7 +111,8 @@ classification, hidden name/ID/type rule or extra model call is admitted.
 Existing user prompts must not be silently overwritten.
 
 Do not add chat, history, accounts, teams, cloud sync, RAG, prompt marketplaces,
-task-library categories/search/import/export, additional providers or models,
+task-library categories/search/import/export, providers or models other than
+the two fixed above,
 app adapters, databases, telemetry, launch-at-login, auto-update, public
 distribution, or broader OS/device support in the current scope. Do not
 generalize prompt and shortcut editing into a prompt library, scripting system,

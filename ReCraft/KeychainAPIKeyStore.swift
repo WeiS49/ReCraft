@@ -15,9 +15,33 @@ protocol APIKeyStoring: Sendable {
     func deleteKey() async throws
 }
 
-actor OpenAIAPIKeyStore: APIKeyStoring {
-    static let service = "com.weis49.ReCraft.openai-api-key"
+/// One Keychain generic-password item per provider. Both providers share this
+/// implementation, including the non-interactive read context; only the
+/// service name differs. The OpenAI service and the account must not change:
+/// they identify the key already stored by installed copies.
+actor KeychainAPIKeyStore: APIKeyStoring {
+    static let openAIService = "com.weis49.ReCraft.openai-api-key"
+    static let anthropicService = "com.weis49.ReCraft.anthropic-api-key"
     static let account = "default"
+
+    static func service(for provider: RewriteProvider) -> String {
+        switch provider {
+        case .claude:
+            anthropicService
+        case .openai:
+            openAIService
+        }
+    }
+
+    nonisolated let service: String
+
+    init(service: String) {
+        self.service = service
+    }
+
+    init(provider: RewriteProvider) {
+        self.init(service: Self.service(for: provider))
+    }
 
     func containsKey() throws -> Bool {
         var query = noninteractiveReadQuery
@@ -94,7 +118,7 @@ actor OpenAIAPIKeyStore: APIKeyStoring {
     private var baseQuery: [CFString: Any] {
         [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: Self.service,
+            kSecAttrService: service,
             kSecAttrAccount: Self.account,
         ]
     }

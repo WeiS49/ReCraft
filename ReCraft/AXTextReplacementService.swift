@@ -246,17 +246,33 @@ final class ClipboardTextReplacementService {
             case .emptySelection:
                 "Select some text first"
             case .apiKeyMissing:
-                "OpenAI API key is not configured"
+                "API key is not configured"
             case .keychainUnavailable:
                 "The API key could not be read from Keychain"
             case .networkFailure:
                 "Network request failed; original text preserved"
             case .apiFailure:
-                "OpenAI request failed; original text preserved"
+                "The model request failed; original text preserved"
             case .emptyModelResponse:
-                "OpenAI returned no text; original text preserved"
+                "The model returned no text; original text preserved"
             case .selectionChanged:
                 "Selection changed; original text preserved"
+            }
+        }
+
+        /// The user-facing message naming the provider an operation used.
+        func message(for provider: RewriteProvider) -> String {
+            switch self {
+            case .apiKeyMissing:
+                "\(provider.displayName) API key is not configured"
+            case .keychainUnavailable:
+                "The \(provider.displayName) API key could not be read from Keychain"
+            case .apiFailure:
+                "\(provider.displayName) request failed; original text preserved"
+            case .emptyModelResponse:
+                "\(provider.displayName) returned no text; original text preserved"
+            default:
+                message
             }
         }
 
@@ -362,10 +378,10 @@ final class ClipboardTextReplacementService {
 
     init(
         pasteboard: NSPasteboard = .general,
-        apiKeyStore: any APIKeyStoring = OpenAIAPIKeyStore()
+        rewriter: CodingPromptRewriter
     ) {
         pasteboardTransaction = PasteboardTransaction(pasteboard: pasteboard)
-        codingPromptRewriter = CodingPromptRewriter(apiKeyStore: apiKeyStore)
+        codingPromptRewriter = rewriter
         #if DEBUG
         testHooks = nil
         #endif
@@ -527,6 +543,18 @@ final class ClipboardTextReplacementService {
     }
 
     func rewriteSelection(using task: RewriteTask) async -> Outcome {
+        await rewriteSelection(
+            using: task,
+            provider: codingPromptRewriter.provider()
+        )
+    }
+
+    /// Runs one task with the provider read when its shortcut fired; the whole
+    /// operation uses that provider even if the setting changes meanwhile.
+    func rewriteSelection(
+        using task: RewriteTask,
+        provider: RewriteProvider
+    ) async -> Outcome {
         guard accessibilityIsTrusted() else {
             return .refused(.accessibilityUnavailable, nil)
         }
@@ -618,7 +646,8 @@ final class ClipboardTextReplacementService {
         do {
             generatedText = try await rewriteText(
                 initialSelection.value,
-                taskPrompt: task.prompt
+                taskPrompt: task.prompt,
+                provider: provider
             )
         } catch CodingPromptRewriteError.apiKeyMissing {
             return .refused(.apiKeyMissing, target.context)
@@ -800,7 +829,8 @@ final class ClipboardTextReplacementService {
 
     private func rewriteText(
         _ selectedText: String,
-        taskPrompt: String
+        taskPrompt: String,
+        provider: RewriteProvider
     ) async throws -> String {
         #if DEBUG
         if let testHooks {
@@ -809,7 +839,8 @@ final class ClipboardTextReplacementService {
         #endif
         return try await codingPromptRewriter.rewrite(
             selectedText,
-            taskPrompt: taskPrompt
+            taskPrompt: taskPrompt,
+            provider: provider
         ).text
     }
 
