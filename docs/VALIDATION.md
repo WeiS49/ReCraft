@@ -39,11 +39,24 @@ What this does and does not establish:
   Accessibility error code and attempt count:
 
   ```bash
-  log show --last 10m --info --predicate 'subsystem == "com.local.ReCraftClipboardSpike"'
+  log show --last 10m --info --predicate 'subsystem == "com.weis49.ReCraft"'
   ```
 
 - Not exercised: physical-keyboard runs, the "Selection changed" report,
   Chrome / VS Code / Codex end-to-end runs, and Undo.
+
+## Rename to ReCraft — 2026-11-18
+
+Version 0.3.0 (4) renames the app from "ReCraft Clipboard Spike" to "ReCraft"
+and the bundle identifier, log subsystem and Keychain service prefix from
+`com.local.ReCraftClipboardSpike` to `com.weis49.ReCraft`.
+
+- `./check` passes from a clean build: 102 executed, 0 failures.
+- A renamed app is a new application to macOS: the Accessibility grant must be
+  given again and the API key entered again. Saved rewrite tasks live in the
+  preferences domain of the bundle identifier and have to be copied once.
+- Not verified at commit time: any shortcut run of the renamed app, because
+  that needs the new Accessibility grant from the user.
 
 ## Unattended runtime testing
 

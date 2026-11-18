@@ -32,12 +32,12 @@ targets:
       - sdk: Security.framework
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.local.ReCraftClipboardSpike
-        PRODUCT_NAME: ReCraft Clipboard Spike
+        PRODUCT_BUNDLE_IDENTIFIER: com.weis49.ReCraft
+        PRODUCT_NAME: ReCraft
         PRODUCT_MODULE_NAME: ReCraft
-        MARKETING_VERSION: 0.2.1
-        CURRENT_PROJECT_VERSION: 3
-        INFOPLIST_KEY_CFBundleDisplayName: ReCraft Clipboard Spike
+        MARKETING_VERSION: 0.3.0
+        CURRENT_PROJECT_VERSION: 4
+        INFOPLIST_KEY_CFBundleDisplayName: ReCraft
         INFOPLIST_KEY_LSUIElement: YES
   ReCraftTests:
     type: bundle.unit-test
@@ -48,9 +48,9 @@ targets:
       - target: ReCraft
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.local.ReCraftClipboardSpikeTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.weis49.ReCraftTests
         GENERATE_INFOPLIST_FILE: YES
-        TEST_HOST: $(BUILT_PRODUCTS_DIR)/ReCraft Clipboard Spike.app/Contents/MacOS/ReCraft Clipboard Spike
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/ReCraft.app/Contents/MacOS/ReCraft
         BUNDLE_LOADER: $(TEST_HOST)
 
 schemes:

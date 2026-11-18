@@ -61,7 +61,7 @@ struct OpenAIResponsesClient: Sendable {
     static let endpoint = URL(string: "https://api.openai.com/v1/responses")!
 
     private static let logger = Logger(
-        subsystem: "com.local.ReCraftClipboardSpike",
+        subsystem: "com.weis49.ReCraft",
         category: "OpenAI"
     )
     private let load: DataLoader

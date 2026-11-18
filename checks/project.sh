@@ -49,7 +49,7 @@ if ! xcodebuild build \
   exit 1
 fi
 
-BINARY="$DERIVED/Build/Products/Release/ReCraft Clipboard Spike.app/Contents/MacOS/ReCraft Clipboard Spike"
+BINARY="$DERIVED/Build/Products/Release/ReCraft.app/Contents/MacOS/ReCraft"
 if strings "$BINARY" | grep -qE "debug-post-hotkey|focus-probe-output|TestHooks"; then
   echo "check: Debug-only diagnostics leaked into the Release binary. Keep them inside #if DEBUG." >&2
   exit 1

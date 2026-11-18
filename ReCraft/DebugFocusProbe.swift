@@ -78,7 +78,7 @@ enum DebugFocusProbe {
                     ).first?.activate()
                     let lead = leads[index % leads.count]
                     try? await Task.sleep(for: .milliseconds(lead))
-                    Logger(subsystem: "com.local.ReCraftClipboardSpike", category: "Probe")
+                    Logger(subsystem: "com.weis49.ReCraft", category: "Probe")
                         .notice("Probe press lead_ms=\(lead, privacy: .public)")
                 }
                 await postHotKey(CGKeyCode(keyCode), holdModifiersMilliseconds: holdModifiers)

@@ -337,7 +337,7 @@ final class ClipboardTextReplacementService {
     private static let revalidationRetryInterval: TimeInterval = 0.02
 
     private let logger = Logger(
-        subsystem: "com.local.ReCraftClipboardSpike",
+        subsystem: "com.weis49.ReCraft",
         category: "Target"
     )
 
