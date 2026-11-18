@@ -67,8 +67,14 @@ before any request is made.
   the snapshot only while ReCraft still owns the staged content; never overwrite
   newer user clipboard content. A task request may send exactly the explicitly
   invoked saved complete task prompt as `instructions`, and the explicitly
-  selected text as input. In a Claude request the task prompt is the `system`
-  value and the selected text is the only user message. The only
+  selected text as input. In a Claude request the `system` value is the task
+  prompt followed by one fixed framing sentence
+  (`AnthropicMessagesClient.sourceFraming`), and the only user message is the
+  selected text wrapped byte for byte in `<source_text>` tags (owner decision
+  2026-11-19: without them Claude answers a selection that reads like a
+  request instead of transforming it). That sentence and the tags are the only
+  text ReCraft adds, they are shown where a task prompt is edited, and they
+  must not grow into per-task or per-type rules. The only
   user-controlled remote text is that saved task prompt and selected source.
   For both providers, never send task names, shortcuts, unselected text,
   surrounding content, clipboard snapshots, or prior requests, and never log,
@@ -106,7 +112,8 @@ before any request is made.
 
 ## Scope and Admission
 
-Each task contains its full editable prompt; no shared base, automatic
+Each task contains its full editable prompt; apart from the single fixed
+Claude source-framing sentence above there is no shared base, automatic
 classification, hidden name/ID/type rule or extra model call is admitted.
 Existing user prompts must not be silently overwritten.
 

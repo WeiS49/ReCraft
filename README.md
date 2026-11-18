@@ -49,9 +49,11 @@ After an explicit shortcut, ReCraft checks Accessibility trust, the foreground
 application, the focused control, and recognized secure-field roles before it
 snapshots the clipboard in memory and copies the selection. It sends one
 request, only to the selected provider, containing exactly the saved complete
-task prompt and only the selected text, with no shared instruction, tools,
-history or retry. To Claude (`api.anthropic.com/v1/messages`) the prompt is the
-`system` value and the selection the only user message; to OpenAI
+task prompt and only the selected text, with no tools, history or retry. To
+Claude (`api.anthropic.com/v1/messages`) the `system` value is the prompt plus
+one fixed sentence saying the user message is source text to transform, not a
+message to answer, and the selection is the only user message, wrapped in
+`<source_text>` tags; to OpenAI
 (`api.openai.com/v1/responses`) they are `instructions` and input, with
 `store=false`.
 

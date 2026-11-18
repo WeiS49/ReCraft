@@ -204,9 +204,15 @@ final class RewriteProviderRoutingTests: XCTestCase {
         )
         XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
         let body = try jsonBody(request)
-        XCTAssertEqual(body["system"] as? String, "Task prompt\n")
+        XCTAssertEqual(
+            body["system"] as? String,
+            "Task prompt\n\n\n" + AnthropicMessagesClient.sourceFraming
+        )
         let messages = try XCTUnwrap(body["messages"] as? [[String: Any]])
-        XCTAssertEqual(messages.first?["content"] as? String, "Selected 中文 🙂\n")
+        XCTAssertEqual(
+            messages.first?["content"] as? String,
+            "<source_text>\nSelected 中文 🙂\n\n</source_text>"
+        )
 
         let claudeLoads = await fixture.claudeStore.loadCount
         let openAILoads = await fixture.openAIStore.loadCount

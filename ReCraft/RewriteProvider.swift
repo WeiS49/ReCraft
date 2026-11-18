@@ -26,7 +26,7 @@ enum RewriteProvider: String, CaseIterable, Identifiable, Sendable {
     var taskPromptDisclosure: String {
         switch self {
         case .claude:
-            "When this task is invoked, its complete prompt is sent unchanged to Claude as the system prompt and the exact selected text is sent as the only user message. ReCraft adds no other instructions. The API key remains in macOS Keychain."
+            "When this task is invoked, its complete prompt is sent to Claude as the system prompt, followed by one fixed sentence saying that the user message is source text to transform, not a message to answer. The exact selected text is sent as the only user message, wrapped in <source_text> tags. The API key remains in macOS Keychain."
         case .openai:
             "When this task is invoked, its complete prompt is sent unchanged to OpenAI as instructions and the exact selected text is sent as input. ReCraft adds no other instructions. The API key remains in macOS Keychain."
         }
