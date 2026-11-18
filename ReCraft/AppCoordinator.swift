@@ -56,19 +56,22 @@ final class AppCoordinator: ObservableObject {
     private let hotKeyRegistry: RewriteTaskHotKeyRegistry
     private let taskSettings: RewriteTaskSettingsModel
     private let feedback = FeedbackPresenter()
+    private let providerSetting: RewriteProviderSetting
     private let textReplacementService: ClipboardTextReplacementService
     private var started = false
     private var operationGate = SingleOperationGate()
 
     init(
-        apiKeyStore: any APIKeyStoring,
+        rewriter: CodingPromptRewriter,
+        providerSetting: RewriteProviderSetting,
         hotKeyRegistry: RewriteTaskHotKeyRegistry,
         taskSettings: RewriteTaskSettingsModel
     ) {
         self.hotKeyRegistry = hotKeyRegistry
         self.taskSettings = taskSettings
+        self.providerSetting = providerSetting
         textReplacementService = ClipboardTextReplacementService(
-            apiKeyStore: apiKeyStore
+            rewriter: rewriter
         )
     }
 
@@ -155,17 +158,28 @@ final class AppCoordinator: ObservableObject {
         statusMessage = "Reading selection…"
         defer { operationGate.finish() }
 
-        handleOutcome(await textReplacementService.replaceSelection())
+        handleOutcome(
+            await textReplacementService.replaceSelection(),
+            provider: providerSetting.current
+        )
     }
 
     private func handleTaskHotKey(_ task: RewriteTask) async {
         guard beginOperationIfAllowed() else { return }
+        // Read once when the shortcut fires; this operation keeps using it.
+        let provider = providerSetting.current
         phase = .processing
         statusMessage = "Running \(task.name)…"
         feedback.show("Running \(task.name)…", kind: .processing)
         defer { operationGate.finish() }
 
-        handleOutcome(await textReplacementService.rewriteSelection(using: task))
+        handleOutcome(
+            await textReplacementService.rewriteSelection(
+                using: task,
+                provider: provider
+            ),
+            provider: provider
+        )
     }
 
     private func beginOperationIfAllowed() -> Bool {
@@ -203,7 +217,10 @@ final class AppCoordinator: ObservableObject {
         }
     }
 
-    private func handleOutcome(_ outcome: ClipboardTextReplacementService.Outcome) {
+    private func handleOutcome(
+        _ outcome: ClipboardTextReplacementService.Outcome,
+        provider: RewriteProvider
+    ) {
         switch outcome {
         case let .replacementSent(context, clipboardRestoration):
             handleReplacementSent(
@@ -218,11 +235,12 @@ final class AppCoordinator: ObservableObject {
                 "Result retained for manual paste reason=\(reason.rawValue, privacy: .public) app=\(context.bundleIdentifier, privacy: .public) role=\(context.role, privacy: .public)"
             )
         case let .refused(reason, context):
+            let message = reason.message(for: provider)
             phase = .failure
-            statusMessage = reason.message
-            feedback.show(reason.message, kind: .failure)
+            statusMessage = message
+            feedback.show(message, kind: .failure)
             logger.notice(
-                "Replacement refused stage=\(reason.logStage, privacy: .public) category=\(reason.logCategory, privacy: .public) app=\(context?.bundleIdentifier ?? "unknown", privacy: .public) role=\(context?.role ?? "unknown", privacy: .public)"
+                "Replacement refused stage=\(reason.logStage, privacy: .public) category=\(reason.logCategory, privacy: .public) provider=\(provider.displayName, privacy: .public) app=\(context?.bundleIdentifier ?? "unknown", privacy: .public) role=\(context?.role ?? "unknown", privacy: .public)"
             )
         }
     }

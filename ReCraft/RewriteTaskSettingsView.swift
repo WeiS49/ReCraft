@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RewriteTaskSettingsView: View {
     @ObservedObject var model: RewriteTaskSettingsModel
+    @ObservedObject var providerSettings: ProviderAPIKeySettingsModel
     @State private var pendingDeletionTaskID: UUID?
     @State private var isConfirmingReset = false
 
@@ -197,7 +198,7 @@ struct RewriteTaskSettingsView: View {
 
             Section("Storage and API Use") {
                 Text("Task names and prompts are stored as plaintext in ReCraft’s local preferences. They are not written to diagnostic logs.")
-                Text("When this task is invoked, its complete prompt is sent unchanged to OpenAI as instructions and the exact selected text is sent as input. ReCraft adds no other instructions. The API key remains in macOS Keychain.")
+                Text(providerSettings.selectedProvider.taskPromptDisclosure)
                 Text("ReCraft checks prompt structure, not the semantic quality of arbitrary user-authored prompts.")
                     .foregroundStyle(.secondary)
             }

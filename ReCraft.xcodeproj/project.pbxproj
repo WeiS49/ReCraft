@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		050A5E86C10C2BE2E3DD2927 /* OpenAIAPIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D55708CF4E3A12F935D177F /* OpenAIAPIKeyStore.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F1 /* AnthropicMessagesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F1 /* AnthropicMessagesClient.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift */; };
+		050A5E86C10C2BE2E3DD2927 /* KeychainAPIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D55708CF4E3A12F935D177F /* KeychainAPIKeyStore.swift */; };
 		1666CC185074F81E604D8F49 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21F25385AF8C916CA2352E47 /* Security.framework */; };
 		18352FE3B5DF47914DC79DD5 /* PasteDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12588768C5A50D752EB03AB8 /* PasteDelivery.swift */; };
 		21F2A48FB299F51353FA17D2 /* RewriteTaskCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1CD3A781B514E85C317DE7 /* RewriteTaskCoreTests.swift */; };
@@ -50,12 +54,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1C1A0D0E0F0A1B2C3D4E5F1 /* AnthropicMessagesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicMessagesClient.swift; sourceTree = "<group>"; };
+		A1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteProvider.swift; sourceTree = "<group>"; };
+		A1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicMessagesClientTests.swift; sourceTree = "<group>"; };
+		A1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteProviderTests.swift; sourceTree = "<group>"; };
 		0EBD0366483A8AAC922C6E9B /* TaskOnlyRewriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOnlyRewriteTests.swift; sourceTree = "<group>"; };
 		0F67FB7CBE3D997BD38CD151 /* AccessibilityPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPermission.swift; sourceTree = "<group>"; };
 		12588768C5A50D752EB03AB8 /* PasteDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteDelivery.swift; sourceTree = "<group>"; };
 		137F06228C99283CC271E3DD /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		1C705D425F60F6A97BDD2453 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		1D55708CF4E3A12F935D177F /* OpenAIAPIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIAPIKeyStore.swift; sourceTree = "<group>"; };
+		1D55708CF4E3A12F935D177F /* KeychainAPIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainAPIKeyStore.swift; sourceTree = "<group>"; };
 		21B8BED3125658D6F3D370F5 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		21F25385AF8C916CA2352E47 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		2DC6F33018F399BEEAA81D3F /* FeedbackPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackPresenter.swift; sourceTree = "<group>"; };
@@ -103,8 +111,10 @@
 		08D02D35D6DD144638137A64 /* ReCraftTests */ = {
 			isa = PBXGroup;
 			children = (
+				A1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift */,
 				D7B319FECB4D0C2EC846F230 /* AppKitEditabilityCapabilityTests.swift */,
 				B706402EE25223EB393F21AB /* ClipboardReplacementTests.swift */,
+				A1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift */,
 				9C1CD3A781B514E85C317DE7 /* RewriteTaskCoreTests.swift */,
 				4AA22110AB15323EF1DC4900 /* RewriteTaskSettingsTests.swift */,
 				DFB3CEBF40E9CAE69F723AA2 /* TaskOnlyHostIsolationTests.swift */,
@@ -126,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				0F67FB7CBE3D997BD38CD151 /* AccessibilityPermission.swift */,
+				A1C1A0D0E0F0A1B2C3D4E5F1 /* AnthropicMessagesClient.swift */,
 				5BDCF2A5246222A757A6D241 /* AppCoordinator.swift */,
 				9FB9F3F32523B6693389CCBA /* AXTextReplacementService.swift */,
 				AC897131E32231B49759F089 /* CodingPromptRewriter.swift */,
@@ -134,11 +145,12 @@
 				8FD6BC9703C5096C713481F4 /* ExactText.swift */,
 				2DC6F33018F399BEEAA81D3F /* FeedbackPresenter.swift */,
 				840AEFEF807D46DF7A434CF3 /* GlobalHotKey.swift */,
-				1D55708CF4E3A12F935D177F /* OpenAIAPIKeyStore.swift */,
+				1D55708CF4E3A12F935D177F /* KeychainAPIKeyStore.swift */,
 				E61036D1579689917C2EC662 /* PasteboardTransaction.swift */,
 				12588768C5A50D752EB03AB8 /* PasteDelivery.swift */,
 				91ACA44E17B1DC4617AEE59D /* PromptComposition.swift */,
 				8A02928DC44B35ED379A4C23 /* ReCraftApp.swift */,
+				A1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift */,
 				52F71C03A489754FDADE3E49 /* RewriteTaskCatalog.swift */,
 				9465E9CEE97C1F1CD0D21628 /* RewriteTaskCatalogStore.swift */,
 				3C7C3BCE4F4FD80F5619AA2E /* RewriteTaskHotKeyRegistry.swift */,
@@ -260,8 +272,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift in Sources */,
 				7B77E04B07518C7C27F1DA97 /* AppKitEditabilityCapabilityTests.swift in Sources */,
 				66A58C42F588D00CAD7B6311 /* ClipboardReplacementTests.swift in Sources */,
+				B1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift in Sources */,
 				21F2A48FB299F51353FA17D2 /* RewriteTaskCoreTests.swift in Sources */,
 				67B2BE21F4680CAB6015C954 /* RewriteTaskSettingsTests.swift in Sources */,
 				D32ADEF7C9687AA7BF799ABF /* TaskOnlyHostIsolationTests.swift in Sources */,
@@ -275,6 +289,8 @@
 			files = (
 				C80A52CE4A1E4D426BC417E2 /* AXTextReplacementService.swift in Sources */,
 				5F470849BA20843F58251980 /* AccessibilityPermission.swift in Sources */,
+				B1C1A0D0E0F0A1B2C3D4E5F1 /* AnthropicMessagesClient.swift in Sources */,
+				B1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift in Sources */,
 				714A65F8C66836C674EA868B /* AppCoordinator.swift in Sources */,
 				E7CD3A75C7BC3B742993B8FC /* CodingPromptRewriter.swift in Sources */,
 				B34E3AE999F929A54F59A793 /* DebugFocusProbe.swift in Sources */,
@@ -282,7 +298,7 @@
 				402A3BFF6685BA0C9DE01C28 /* ExactText.swift in Sources */,
 				ECDA0006CF3C4B1113A7385E /* FeedbackPresenter.swift in Sources */,
 				6B8C42D42180853F59584BB3 /* GlobalHotKey.swift in Sources */,
-				050A5E86C10C2BE2E3DD2927 /* OpenAIAPIKeyStore.swift in Sources */,
+				050A5E86C10C2BE2E3DD2927 /* KeychainAPIKeyStore.swift in Sources */,
 				18352FE3B5DF47914DC79DD5 /* PasteDelivery.swift in Sources */,
 				3A80A5B35D2C588BAE791A83 /* PasteboardTransaction.swift in Sources */,
 				2D7D00E661A353C27DED7EC6 /* PromptComposition.swift in Sources */,

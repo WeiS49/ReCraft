@@ -9,13 +9,13 @@ open "/Applications/ReCraft.app"
 ```
 
 - 菜单栏图标里可以查看辅助功能（Accessibility）授权状态。
-- **Settings… → API Key**：录入或更新 OpenAI API Key（只存在钥匙串里）。
+- **Settings… → API Key**：选择改写提供方（Claude 或 OpenAI；从未选择过时为 Claude，旧版本升级后也是），并分别录入、更新或删除两家各自的 API Key（每家一条钥匙串条目，只存在钥匙串里）。菜单栏会显示当前提供方及其 Key 是否已配置。不会自动改用另一家：选了 Claude 却没有 Claude 的 Key 时，任务在发出任何请求前就停止。
 - **Settings… → Rewrite Tasks**：新增或编辑任务的名称、完整 Prompt 和快捷键，然后 **Save**。任务直接由各自的快捷键触发。
 - `Control-Option-Command-R` 是本地测试动作：给选区加 `[ReCraft] ` 前缀，不调用模型。
 
 ## 工作方式与隐私
 
-按下快捷键后，ReCraft 先用辅助功能确认前台应用和焦点控件（密码框会被拒绝），在内存里备份剪贴板，发送 Command-C 取得选中文字；远程任务只把保存的完整 Prompt 和选中文字发给 OpenAI Responses API（`gpt-5.6-luna`，`store=false`，无历史、无工具）。粘贴前会再次确认目标和选区没有变化，之后只在剪贴板仍归 ReCraft 所有时恢复原内容。
+按下快捷键后，ReCraft 先用辅助功能确认前台应用和焦点控件（密码框会被拒绝），在内存里备份剪贴板，发送 Command-C 取得选中文字；远程任务只向当前选中的提供方发一次请求，内容只有保存的完整 Prompt 和选中文字（无历史、无工具、不重试）：Claude 走 Messages API（`claude-haiku-5-5`，关闭 thinking，Prompt 作为 `system`，选中文字作为唯一一条 user 消息）；OpenAI 走 Responses API（`gpt-5.6-luna`，`store=false`）。每家只有一个固定模型，不提供模型选择。粘贴前会再次确认目标和选区没有变化，之后只在剪贴板仍归 ReCraft 所有时恢复原内容。
 
 辅助功能是唯一申请的系统权限。日志只包含应用标识、控件角色、阶段、耗时和错误类别，不包含任何文字内容。
 
@@ -36,5 +36,6 @@ log show --last 10m --info --predicate 'subsystem == "com.weis49.ReCraft"'
 ## 已知限制
 
 - 替换为纯文本，不保留选区内的富文本格式。
-- 内置默认 Prompt 的质量评估尚未通过，请当作可编辑的起点；自定义 Prompt 不保证语义质量。
+- 内置默认 Prompt 的质量评估尚未通过，请当作可编辑的起点；自定义 Prompt 不保证语义质量。这些 Prompt 是针对 OpenAI 模型调的，在 Claude 上的效果未经评估。
+- 提供方侧的数据保留遵循所选提供方账户的数据设置；`store=false` 本身不代表零保留。
 - 只在一台 Apple Silicon Mac 和少数应用上验证过；这是个人开发预览版，不是公开发行版本。

@@ -332,22 +332,72 @@ struct OpenAIResponsesClient: Sendable {
     }
 }
 
+/// The task rewrite entry point. It reads the global provider once at the
+/// start of each call, loads only that provider's key and sends only to that
+/// provider. There is no fallback to the other provider.
 struct CodingPromptRewriter: Sendable {
-    private let apiKeyStore: any APIKeyStoring
-    private let client: OpenAIResponsesClient
+    private let currentProvider: @Sendable () -> RewriteProvider
+    private let openAIKeyStore: any APIKeyStoring
+    private let claudeKeyStore: any APIKeyStoring
+    private let openAIClient: OpenAIResponsesClient
+    private let claudeClient: AnthropicMessagesClient
 
+    init(
+        providerSetting: RewriteProviderSetting,
+        openAIKeyStore: any APIKeyStoring,
+        claudeKeyStore: any APIKeyStoring,
+        openAIClient: OpenAIResponsesClient = OpenAIResponsesClient(),
+        claudeClient: AnthropicMessagesClient = AnthropicMessagesClient()
+    ) {
+        currentProvider = { providerSetting.current }
+        self.openAIKeyStore = openAIKeyStore
+        self.claudeKeyStore = claudeKeyStore
+        self.openAIClient = openAIClient
+        self.claudeClient = claudeClient
+    }
+
+    /// An OpenAI-only rewriter with one key store, independent of the global
+    /// provider setting.
     init(
         apiKeyStore: any APIKeyStoring,
         client: OpenAIResponsesClient = OpenAIResponsesClient()
     ) {
-        self.apiKeyStore = apiKeyStore
-        self.client = client
+        currentProvider = { .openai }
+        openAIKeyStore = apiKeyStore
+        claudeKeyStore = apiKeyStore
+        openAIClient = client
+        claudeClient = AnthropicMessagesClient { _ in
+            throw CodingPromptRewriteError.networkFailure
+        }
+    }
+
+    func provider() -> RewriteProvider {
+        currentProvider()
     }
 
     func rewrite(
         _ selectedText: String,
         taskPrompt: String
     ) async throws -> CodingPromptRewriteResult {
+        try await rewrite(
+            selectedText,
+            taskPrompt: taskPrompt,
+            provider: currentProvider()
+        )
+    }
+
+    func rewrite(
+        _ selectedText: String,
+        taskPrompt: String,
+        provider: RewriteProvider
+    ) async throws -> CodingPromptRewriteResult {
+        let apiKeyStore: any APIKeyStoring = switch provider {
+        case .claude:
+            claudeKeyStore
+        case .openai:
+            openAIKeyStore
+        }
+
         let apiKey: String
         do {
             guard let storedKey = try await apiKeyStore.loadKey(),
@@ -361,10 +411,19 @@ struct CodingPromptRewriter: Sendable {
             throw CodingPromptRewriteError.keychainUnavailable
         }
 
-        return try await client.rewrite(
-            selectedText: selectedText,
-            instructions: taskPrompt,
-            apiKey: apiKey
-        )
+        switch provider {
+        case .claude:
+            return try await claudeClient.rewrite(
+                selectedText: selectedText,
+                instructions: taskPrompt,
+                apiKey: apiKey
+            )
+        case .openai:
+            return try await openAIClient.rewrite(
+                selectedText: selectedText,
+                instructions: taskPrompt,
+                apiKey: apiKey
+            )
+        }
     }
 }
