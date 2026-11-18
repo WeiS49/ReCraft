@@ -4,7 +4,7 @@ ReCraft is a personal macOS menu-bar utility: select text, press a task shortcut
 
 ## Status
 
-Version 0.2.1 (3). Run `./check` before delivering a change: it runs the full
+Version 0.3.0 (4). Run `./check` before delivering a change: it runs the full
 offline XCTest suite and a Release build with ad-hoc signing. No test calls
 the network or needs an API key.
 
@@ -27,7 +27,7 @@ own acceptance gate; treat them as starting points to edit.
 ## Run and configure
 
 ```bash
-open "/Applications/ReCraft Clipboard Spike.app"
+open "/Applications/ReCraft.app"
 ```
 
 ReCraft appears in the menu bar without a main window. Check Accessibility status there. Use **Settings… → API Key** to enter or update the Keychain-backed API Key when needed.

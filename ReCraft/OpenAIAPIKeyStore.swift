@@ -16,7 +16,7 @@ protocol APIKeyStoring: Sendable {
 }
 
 actor OpenAIAPIKeyStore: APIKeyStoring {
-    static let service = "com.local.ReCraftClipboardSpike.openai-api-key"
+    static let service = "com.weis49.ReCraft.openai-api-key"
     static let account = "default"
 
     func containsKey() throws -> Bool {

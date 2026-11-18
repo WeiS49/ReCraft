@@ -4,7 +4,7 @@ import Foundation
 @MainActor
 final class PasteboardTransaction {
     static let operationMarkerType = NSPasteboard.PasteboardType(
-        "com.local.recraftclipboardspike.operation-token"
+        "com.weis49.recraft.operation-token"
     )
 
     struct Representation: Equatable {

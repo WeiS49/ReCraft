@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 @main
-struct ReCraftClipboardSpikeApp: App {
+struct ReCraftApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
@@ -16,7 +16,7 @@ struct ReCraftClipboardSpikeApp: App {
             }
         } label: {
             Label(
-                "ReCraft Clipboard Spike",
+                "ReCraft",
                 systemImage: appDelegate.coordinator.menuBarIconName
             )
         }
@@ -132,7 +132,7 @@ private struct MenuContentView: View {
     @ObservedObject var taskSettings: RewriteTaskSettingsModel
 
     var body: some View {
-        Text("ReCraft Clipboard Spike")
+        Text("ReCraft")
         Text("Clipboard copy → rewrite → paste")
         Text(coordinator.statusMessage)
 
@@ -187,7 +187,7 @@ private struct MenuContentView: View {
         if coordinator.shouldRefuseTermination {
             Text("Replacement in progress")
         } else {
-            Button("Quit ReCraft Clipboard Spike") {
+            Button("Quit ReCraft") {
                 NSApplication.shared.terminate(nil)
             }
             .keyboardShortcut("q")

@@ -5,7 +5,7 @@ ReCraft 是一个个人使用的 macOS 菜单栏小工具：在支持的可编�
 ## 使用
 
 ```bash
-open "/Applications/ReCraft Clipboard Spike.app"
+open "/Applications/ReCraft.app"
 ```
 
 - 菜单栏图标里可以查看辅助功能（Accessibility）授权状态。
@@ -30,7 +30,7 @@ open "/Applications/ReCraft Clipboard Spike.app"
 排查“按了快捷键却提示找不到焦点”一类问题时，可以查看只含元数据的日志：
 
 ```bash
-log show --last 10m --info --predicate 'subsystem == "com.local.ReCraftClipboardSpike"'
+log show --last 10m --info --predicate 'subsystem == "com.weis49.ReCraft"'
 ```
 
 ## 已知限制

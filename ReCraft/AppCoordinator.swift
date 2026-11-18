@@ -50,7 +50,7 @@ final class AppCoordinator: ObservableObject {
     }
 
     private let logger = Logger(
-        subsystem: "com.local.ReCraftClipboardSpike",
+        subsystem: "com.weis49.ReCraft",
         category: "App"
     )
     private let hotKeyRegistry: RewriteTaskHotKeyRegistry
@@ -137,7 +137,7 @@ final class AppCoordinator: ObservableObject {
             feedback.show("Accessibility access granted", kind: .success)
         } else {
             feedback.show(
-                "Enable ReCraft Clipboard Spike in Privacy & Security → Accessibility",
+                "Enable ReCraft in Privacy & Security → Accessibility",
                 kind: .failure
             )
         }
