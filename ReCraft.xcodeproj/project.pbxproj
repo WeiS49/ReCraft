@@ -1,0 +1,550 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		050A5E86C10C2BE2E3DD2927 /* OpenAIAPIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D55708CF4E3A12F935D177F /* OpenAIAPIKeyStore.swift */; };
+		1666CC185074F81E604D8F49 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21F25385AF8C916CA2352E47 /* Security.framework */; };
+		18352FE3B5DF47914DC79DD5 /* PasteDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12588768C5A50D752EB03AB8 /* PasteDelivery.swift */; };
+		21F2A48FB299F51353FA17D2 /* RewriteTaskCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1CD3A781B514E85C317DE7 /* RewriteTaskCoreTests.swift */; };
+		23C8B0A8DB3555FA6E222E4D /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 137F06228C99283CC271E3DD /* LocalAuthentication.framework */; };
+		27D1D2EED6E73A94624630F6 /* ReCraftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A02928DC44B35ED379A4C23 /* ReCraftApp.swift */; };
+		2D7D00E661A353C27DED7EC6 /* PromptComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ACA44E17B1DC4617AEE59D /* PromptComposition.swift */; };
+		3A80A5B35D2C588BAE791A83 /* PasteboardTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61036D1579689917C2EC662 /* PasteboardTransaction.swift */; };
+		3DF13FB67ABEF830C6C258D9 /* TaskOnlyRewriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBD0366483A8AAC922C6E9B /* TaskOnlyRewriteTests.swift */; };
+		402A3BFF6685BA0C9DE01C28 /* ExactText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD6BC9703C5096C713481F4 /* ExactText.swift */; };
+		470D22133949B2AEDE0813A9 /* RewriteTaskSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E81995B639FE798FC2905FC /* RewriteTaskSettings.swift */; };
+		482F3415B8797E784AAB9B49 /* RewriteTaskSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A16FF56B2E4D404A299E5A3 /* RewriteTaskSettingsView.swift */; };
+		58B7E65F6325BFBDC94E4193 /* RewriteTaskCatalogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465E9CEE97C1F1CD0D21628 /* RewriteTaskCatalogStore.swift */; };
+		5F470849BA20843F58251980 /* AccessibilityPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F67FB7CBE3D997BD38CD151 /* AccessibilityPermission.swift */; };
+		66A58C42F588D00CAD7B6311 /* ClipboardReplacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B706402EE25223EB393F21AB /* ClipboardReplacementTests.swift */; };
+		67B2BE21F4680CAB6015C954 /* RewriteTaskSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA22110AB15323EF1DC4900 /* RewriteTaskSettingsTests.swift */; };
+		6B8C42D42180853F59584BB3 /* GlobalHotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840AEFEF807D46DF7A434CF3 /* GlobalHotKey.swift */; };
+		714A65F8C66836C674EA868B /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDCF2A5246222A757A6D241 /* AppCoordinator.swift */; };
+		785EB6180CFF6105D7CD487E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 902A8C850FEB60D127F08C7B /* Carbon.framework */; };
+		7B77E04B07518C7C27F1DA97 /* AppKitEditabilityCapabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B319FECB4D0C2EC846F230 /* AppKitEditabilityCapabilityTests.swift */; };
+		8C2B77D636C0CE4DB3C75A26 /* DeterministicTextTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224697D708997A93525C0BE /* DeterministicTextTransformer.swift */; };
+		9365A49C0EE83B31DE6752C7 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C705D425F60F6A97BDD2453 /* ApplicationServices.framework */; };
+		A1957658C4B28AA04A9F6216 /* RewriteTaskCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F71C03A489754FDADE3E49 /* RewriteTaskCatalog.swift */; };
+		B34E3AE999F929A54F59A793 /* DebugFocusProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C666C5592356D67B1F9A06B /* DebugFocusProbe.swift */; };
+		C80A52CE4A1E4D426BC417E2 /* AXTextReplacementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB9F3F32523B6693389CCBA /* AXTextReplacementService.swift */; };
+		D32ADEF7C9687AA7BF799ABF /* TaskOnlyHostIsolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB3CEBF40E9CAE69F723AA2 /* TaskOnlyHostIsolationTests.swift */; };
+		E3F90495F1EF696B96AE0F77 /* RewriteTaskHotKeyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7C3BCE4F4FD80F5619AA2E /* RewriteTaskHotKeyRegistry.swift */; };
+		E77006DA182297B9E420DCB1 /* ShortcutRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1578800C0E891D8A1A92072 /* ShortcutRecorder.swift */; };
+		E7CD3A75C7BC3B742993B8FC /* CodingPromptRewriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC897131E32231B49759F089 /* CodingPromptRewriter.swift */; };
+		ECDA0006CF3C4B1113A7385E /* FeedbackPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC6F33018F399BEEAA81D3F /* FeedbackPresenter.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0E5A33E879343AE0C2FA7C91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D72B153222A08DA140411A3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F2A39E830B866EB85750B3E;
+			remoteInfo = ReCraft;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0EBD0366483A8AAC922C6E9B /* TaskOnlyRewriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOnlyRewriteTests.swift; sourceTree = "<group>"; };
+		0F67FB7CBE3D997BD38CD151 /* AccessibilityPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPermission.swift; sourceTree = "<group>"; };
+		12588768C5A50D752EB03AB8 /* PasteDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteDelivery.swift; sourceTree = "<group>"; };
+		137F06228C99283CC271E3DD /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		1C705D425F60F6A97BDD2453 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		1D55708CF4E3A12F935D177F /* OpenAIAPIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIAPIKeyStore.swift; sourceTree = "<group>"; };
+		21B8BED3125658D6F3D370F5 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		21F25385AF8C916CA2352E47 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		2DC6F33018F399BEEAA81D3F /* FeedbackPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackPresenter.swift; sourceTree = "<group>"; };
+		3A16FF56B2E4D404A299E5A3 /* RewriteTaskSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskSettingsView.swift; sourceTree = "<group>"; };
+		3C7C3BCE4F4FD80F5619AA2E /* RewriteTaskHotKeyRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskHotKeyRegistry.swift; sourceTree = "<group>"; };
+		4AA22110AB15323EF1DC4900 /* RewriteTaskSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskSettingsTests.swift; sourceTree = "<group>"; };
+		4F3DC94D48024D64BFF10B26 /* ReCraftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReCraftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		52F71C03A489754FDADE3E49 /* RewriteTaskCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskCatalog.swift; sourceTree = "<group>"; };
+		5BDCF2A5246222A757A6D241 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		5E81995B639FE798FC2905FC /* RewriteTaskSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskSettings.swift; sourceTree = "<group>"; };
+		6224697D708997A93525C0BE /* DeterministicTextTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterministicTextTransformer.swift; sourceTree = "<group>"; };
+		82B54D522A094269880095FE /* ReCraft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReCraft.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		840AEFEF807D46DF7A434CF3 /* GlobalHotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKey.swift; sourceTree = "<group>"; };
+		8A02928DC44B35ED379A4C23 /* ReCraftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReCraftApp.swift; sourceTree = "<group>"; };
+		8C666C5592356D67B1F9A06B /* DebugFocusProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugFocusProbe.swift; sourceTree = "<group>"; };
+		8FD6BC9703C5096C713481F4 /* ExactText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExactText.swift; sourceTree = "<group>"; };
+		902A8C850FEB60D127F08C7B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		91ACA44E17B1DC4617AEE59D /* PromptComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptComposition.swift; sourceTree = "<group>"; };
+		9465E9CEE97C1F1CD0D21628 /* RewriteTaskCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskCatalogStore.swift; sourceTree = "<group>"; };
+		9C1CD3A781B514E85C317DE7 /* RewriteTaskCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteTaskCoreTests.swift; sourceTree = "<group>"; };
+		9FB9F3F32523B6693389CCBA /* AXTextReplacementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXTextReplacementService.swift; sourceTree = "<group>"; };
+		AC897131E32231B49759F089 /* CodingPromptRewriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingPromptRewriter.swift; sourceTree = "<group>"; };
+		B706402EE25223EB393F21AB /* ClipboardReplacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardReplacementTests.swift; sourceTree = "<group>"; };
+		C1578800C0E891D8A1A92072 /* ShortcutRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutRecorder.swift; sourceTree = "<group>"; };
+		D7B319FECB4D0C2EC846F230 /* AppKitEditabilityCapabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitEditabilityCapabilityTests.swift; sourceTree = "<group>"; };
+		DFB3CEBF40E9CAE69F723AA2 /* TaskOnlyHostIsolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOnlyHostIsolationTests.swift; sourceTree = "<group>"; };
+		E61036D1579689917C2EC662 /* PasteboardTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardTransaction.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		978F2AC116868FA2C8D00D45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9365A49C0EE83B31DE6752C7 /* ApplicationServices.framework in Frameworks */,
+				785EB6180CFF6105D7CD487E /* Carbon.framework in Frameworks */,
+				23C8B0A8DB3555FA6E222E4D /* LocalAuthentication.framework in Frameworks */,
+				1666CC185074F81E604D8F49 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08D02D35D6DD144638137A64 /* ReCraftTests */ = {
+			isa = PBXGroup;
+			children = (
+				D7B319FECB4D0C2EC846F230 /* AppKitEditabilityCapabilityTests.swift */,
+				B706402EE25223EB393F21AB /* ClipboardReplacementTests.swift */,
+				9C1CD3A781B514E85C317DE7 /* RewriteTaskCoreTests.swift */,
+				4AA22110AB15323EF1DC4900 /* RewriteTaskSettingsTests.swift */,
+				DFB3CEBF40E9CAE69F723AA2 /* TaskOnlyHostIsolationTests.swift */,
+				0EBD0366483A8AAC922C6E9B /* TaskOnlyRewriteTests.swift */,
+			);
+			path = ReCraftTests;
+			sourceTree = "<group>";
+		};
+		3A45F4E51B4F274B0B5DB093 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				82B54D522A094269880095FE /* ReCraft.app */,
+				4F3DC94D48024D64BFF10B26 /* ReCraftTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7B741EA984D54CDD09D89125 /* ReCraft */ = {
+			isa = PBXGroup;
+			children = (
+				0F67FB7CBE3D997BD38CD151 /* AccessibilityPermission.swift */,
+				5BDCF2A5246222A757A6D241 /* AppCoordinator.swift */,
+				9FB9F3F32523B6693389CCBA /* AXTextReplacementService.swift */,
+				AC897131E32231B49759F089 /* CodingPromptRewriter.swift */,
+				8C666C5592356D67B1F9A06B /* DebugFocusProbe.swift */,
+				6224697D708997A93525C0BE /* DeterministicTextTransformer.swift */,
+				8FD6BC9703C5096C713481F4 /* ExactText.swift */,
+				2DC6F33018F399BEEAA81D3F /* FeedbackPresenter.swift */,
+				840AEFEF807D46DF7A434CF3 /* GlobalHotKey.swift */,
+				1D55708CF4E3A12F935D177F /* OpenAIAPIKeyStore.swift */,
+				E61036D1579689917C2EC662 /* PasteboardTransaction.swift */,
+				12588768C5A50D752EB03AB8 /* PasteDelivery.swift */,
+				91ACA44E17B1DC4617AEE59D /* PromptComposition.swift */,
+				8A02928DC44B35ED379A4C23 /* ReCraftApp.swift */,
+				52F71C03A489754FDADE3E49 /* RewriteTaskCatalog.swift */,
+				9465E9CEE97C1F1CD0D21628 /* RewriteTaskCatalogStore.swift */,
+				3C7C3BCE4F4FD80F5619AA2E /* RewriteTaskHotKeyRegistry.swift */,
+				5E81995B639FE798FC2905FC /* RewriteTaskSettings.swift */,
+				3A16FF56B2E4D404A299E5A3 /* RewriteTaskSettingsView.swift */,
+				C1578800C0E891D8A1A92072 /* ShortcutRecorder.swift */,
+			);
+			path = ReCraft;
+			sourceTree = "<group>";
+		};
+		C7A75CC0DFA82D605A732EF0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				21B8BED3125658D6F3D370F5 /* Base.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		C88CB39C8433727146573D11 = {
+			isa = PBXGroup;
+			children = (
+				C7A75CC0DFA82D605A732EF0 /* Config */,
+				7B741EA984D54CDD09D89125 /* ReCraft */,
+				08D02D35D6DD144638137A64 /* ReCraftTests */,
+				DFACC98B9F8580F0DDACA9B3 /* Frameworks */,
+				3A45F4E51B4F274B0B5DB093 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DFACC98B9F8580F0DDACA9B3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1C705D425F60F6A97BDD2453 /* ApplicationServices.framework */,
+				902A8C850FEB60D127F08C7B /* Carbon.framework */,
+				137F06228C99283CC271E3DD /* LocalAuthentication.framework */,
+				21F25385AF8C916CA2352E47 /* Security.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8F2A39E830B866EB85750B3E /* ReCraft */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D979589CEE7703182E3D360C /* Build configuration list for PBXNativeTarget "ReCraft" */;
+			buildPhases = (
+				D0ED8C0187C7DFDC03A709D5 /* Sources */,
+				978F2AC116868FA2C8D00D45 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReCraft;
+			packageProductDependencies = (
+			);
+			productName = ReCraft;
+			productReference = 82B54D522A094269880095FE /* ReCraft.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F16D0B7F9805A33325914AF2 /* ReCraftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19A2C6DAB11A54D3B799D900 /* Build configuration list for PBXNativeTarget "ReCraftTests" */;
+			buildPhases = (
+				AF3DEC48D9B4E68F4E59018C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				90289780F7CD05CFAA93A950 /* PBXTargetDependency */,
+			);
+			name = ReCraftTests;
+			packageProductDependencies = (
+			);
+			productName = ReCraftTests;
+			productReference = 4F3DC94D48024D64BFF10B26 /* ReCraftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2D72B153222A08DA140411A3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					8F2A39E830B866EB85750B3E = {
+						ProvisioningStyle = Manual;
+					};
+					F16D0B7F9805A33325914AF2 = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = F4927D7282DC413AD88F75B2 /* Build configuration list for PBXProject "ReCraft" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C88CB39C8433727146573D11;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3A45F4E51B4F274B0B5DB093 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8F2A39E830B866EB85750B3E /* ReCraft */,
+				F16D0B7F9805A33325914AF2 /* ReCraftTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AF3DEC48D9B4E68F4E59018C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B77E04B07518C7C27F1DA97 /* AppKitEditabilityCapabilityTests.swift in Sources */,
+				66A58C42F588D00CAD7B6311 /* ClipboardReplacementTests.swift in Sources */,
+				21F2A48FB299F51353FA17D2 /* RewriteTaskCoreTests.swift in Sources */,
+				67B2BE21F4680CAB6015C954 /* RewriteTaskSettingsTests.swift in Sources */,
+				D32ADEF7C9687AA7BF799ABF /* TaskOnlyHostIsolationTests.swift in Sources */,
+				3DF13FB67ABEF830C6C258D9 /* TaskOnlyRewriteTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0ED8C0187C7DFDC03A709D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C80A52CE4A1E4D426BC417E2 /* AXTextReplacementService.swift in Sources */,
+				5F470849BA20843F58251980 /* AccessibilityPermission.swift in Sources */,
+				714A65F8C66836C674EA868B /* AppCoordinator.swift in Sources */,
+				E7CD3A75C7BC3B742993B8FC /* CodingPromptRewriter.swift in Sources */,
+				B34E3AE999F929A54F59A793 /* DebugFocusProbe.swift in Sources */,
+				8C2B77D636C0CE4DB3C75A26 /* DeterministicTextTransformer.swift in Sources */,
+				402A3BFF6685BA0C9DE01C28 /* ExactText.swift in Sources */,
+				ECDA0006CF3C4B1113A7385E /* FeedbackPresenter.swift in Sources */,
+				6B8C42D42180853F59584BB3 /* GlobalHotKey.swift in Sources */,
+				050A5E86C10C2BE2E3DD2927 /* OpenAIAPIKeyStore.swift in Sources */,
+				18352FE3B5DF47914DC79DD5 /* PasteDelivery.swift in Sources */,
+				3A80A5B35D2C588BAE791A83 /* PasteboardTransaction.swift in Sources */,
+				2D7D00E661A353C27DED7EC6 /* PromptComposition.swift in Sources */,
+				27D1D2EED6E73A94624630F6 /* ReCraftApp.swift in Sources */,
+				A1957658C4B28AA04A9F6216 /* RewriteTaskCatalog.swift in Sources */,
+				58B7E65F6325BFBDC94E4193 /* RewriteTaskCatalogStore.swift in Sources */,
+				E3F90495F1EF696B96AE0F77 /* RewriteTaskHotKeyRegistry.swift in Sources */,
+				470D22133949B2AEDE0813A9 /* RewriteTaskSettings.swift in Sources */,
+				482F3415B8797E784AAB9B49 /* RewriteTaskSettingsView.swift in Sources */,
+				E77006DA182297B9E420DCB1 /* ShortcutRecorder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		90289780F7CD05CFAA93A950 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F2A39E830B866EB85750B3E /* ReCraft */;
+			targetProxy = 0E5A33E879343AE0C2FA7C91 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2133F9FC042E94752A47FAEB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ReCraftClipboardSpikeTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReCraft Clipboard Spike.app/Contents/MacOS/ReCraft Clipboard Spike";
+			};
+			name = Release;
+		};
+		3F47A337029A7E96710BAE11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				INFOPLIST_KEY_CFBundleDisplayName = "ReCraft Clipboard Spike";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ReCraftClipboardSpike;
+				PRODUCT_MODULE_NAME = ReCraft;
+				PRODUCT_NAME = "ReCraft Clipboard Spike";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6CCD42AE2026BEA722FD9BE8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21B8BED3125658D6F3D370F5 /* Base.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		C2D9598DFD8AB77D33915053 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21B8BED3125658D6F3D370F5 /* Base.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		D3312CE6E2BAB66089D22A4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				INFOPLIST_KEY_CFBundleDisplayName = "ReCraft Clipboard Spike";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ReCraftClipboardSpike;
+				PRODUCT_MODULE_NAME = ReCraft;
+				PRODUCT_NAME = "ReCraft Clipboard Spike";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		FFF966E1DB80A4C10507E102 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.ReCraftClipboardSpikeTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReCraft Clipboard Spike.app/Contents/MacOS/ReCraft Clipboard Spike";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		19A2C6DAB11A54D3B799D900 /* Build configuration list for PBXNativeTarget "ReCraftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFF966E1DB80A4C10507E102 /* Debug */,
+				2133F9FC042E94752A47FAEB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D979589CEE7703182E3D360C /* Build configuration list for PBXNativeTarget "ReCraft" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F47A337029A7E96710BAE11 /* Debug */,
+				D3312CE6E2BAB66089D22A4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F4927D7282DC413AD88F75B2 /* Build configuration list for PBXProject "ReCraft" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CCD42AE2026BEA722FD9BE8 /* Debug */,
+				C2D9598DFD8AB77D33915053 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2D72B153222A08DA140411A3 /* Project object */;
+}

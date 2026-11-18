@@ -1,0 +1,6 @@
+// Shared build settings. Machine-specific signing lives in Config/Local.xcconfig,
+// which is not tracked: copy Local.xcconfig.example and set your own team.
+// Without it the app is signed ad hoc ("Sign to Run Locally").
+CODE_SIGN_IDENTITY = -
+CODE_SIGN_STYLE = Manual
+#include? "Local.xcconfig"

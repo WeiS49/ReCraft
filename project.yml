@@ -1,0 +1,63 @@
+name: ReCraft
+
+options:
+  deploymentTarget:
+    macOS: "26.0"
+
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ARCHS: arm64
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+    CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+    ENABLE_APP_SANDBOX: NO
+    ENABLE_HARDENED_RUNTIME: NO
+    GENERATE_INFOPLIST_FILE: YES
+
+targets:
+  ReCraft:
+    type: application
+    platform: macOS
+    sources:
+      - path: ReCraft
+    dependencies:
+      - sdk: ApplicationServices.framework
+      - sdk: Carbon.framework
+      - sdk: LocalAuthentication.framework
+      - sdk: Security.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.ReCraftClipboardSpike
+        PRODUCT_NAME: ReCraft Clipboard Spike
+        PRODUCT_MODULE_NAME: ReCraft
+        MARKETING_VERSION: 0.2.1
+        CURRENT_PROJECT_VERSION: 3
+        INFOPLIST_KEY_CFBundleDisplayName: ReCraft Clipboard Spike
+        INFOPLIST_KEY_LSUIElement: YES
+  ReCraftTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: ReCraftTests
+    dependencies:
+      - target: ReCraft
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.ReCraftClipboardSpikeTests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/ReCraft Clipboard Spike.app/Contents/MacOS/ReCraft Clipboard Spike
+        BUNDLE_LOADER: $(TEST_HOST)
+
+schemes:
+  ReCraft:
+    build:
+      targets:
+        ReCraft: all
+    test:
+      targets:
+        - ReCraftTests
