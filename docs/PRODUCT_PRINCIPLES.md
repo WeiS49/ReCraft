@@ -99,7 +99,9 @@ It admits one narrow configuration model:
 - no invocation-time picker; each task is invoked directly by its shortcut;
 - task configuration stored in local preferences, with the API Key still only
   in Keychain;
-- one full, editable prompt per task, sent without a shared base, classifier,
+- one full, editable prompt per task, sent without a shared base (the one
+  exception is the fixed Claude source-framing sentence recorded in
+  `AGENTS.md`), classifier,
   hidden task-type rule or extra model call; and
 - a fresh single-policy default/compatibility/holdout acceptance gate and the
   remaining installed-App checks before this feature is considered complete.
