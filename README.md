@@ -114,3 +114,7 @@ approved Accessibility workflow.
 
 See [product principles](docs/PRODUCT_PRINCIPLES.md) and the
 [validation record](docs/VALIDATION.md).
+
+## License
+
+[MIT](LICENSE)

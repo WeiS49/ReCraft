@@ -42,3 +42,7 @@ log show --last 10m --info --predicate 'subsystem == "com.weis49.ReCraft"'
 - 内置默认 Prompt 的质量评估尚未通过，请当作可编辑的起点；自定义 Prompt 不保证语义质量。这些 Prompt 是针对 OpenAI 模型调的，在 Claude 上的效果未经评估。
 - 提供方侧的数据保留遵循所选提供方账户的数据设置；`store=false` 本身不代表零保留。
 - 只在一台 Apple Silicon Mac 和少数应用上验证过；这是个人开发预览版，不是公开发行版本。
+
+## 许可证
+
+[MIT](LICENSE)
