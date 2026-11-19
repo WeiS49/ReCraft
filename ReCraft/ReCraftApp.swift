@@ -82,6 +82,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             persistence: persistence,
             activator: hotKeyRegistry,
             shortcutRecorder: hotKeyRegistry,
+            promptGenerator: TaskPromptGenerator(
+                providerSetting: providerSetting,
+                openAIKeyStore: openAIKeyStore,
+                claudeKeyStore: claudeKeyStore
+            ),
             loadImmediately: !isRunningUnitTests
         )
 

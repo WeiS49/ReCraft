@@ -16,7 +16,10 @@ without disrupting the user's work.
 
 The app ships the clipboard replacement path, saved rewrite tasks with
 editable prompts and dedicated configurable global shortcuts, and one local
-deterministic test action (`Control-Option-Command-R`). The built-in default
+deterministic test action (`Control-Option-Command-R`). The task editor can
+also generate a task name and complete prompt from a short description after
+an explicit Generate Prompt click (owner decision 2026-11-19); the result only
+fills the selected task's draft. The built-in default
 prompts have not passed the project's quality gate; do not describe them as
 accepted. Paid model experiments need an explicit owner decision and budget
 before any request is made.
@@ -38,6 +41,13 @@ before any request is made.
     `reasoning.effort = none`.
   There is no per-task provider, model choice, retry, or automatic fallback to
   the other provider.
+- Generating a task prompt in Settings is the third fixed use (owner decision
+  2026-11-19). It uses the same selected provider and that provider's key:
+  Claude with `claude-sonnet-5-5` (thinking omitted, i.e. adaptive;
+  `output_config.effort` `medium`; `max_tokens` 8000), OpenAI with the same
+  `gpt-5.6-luna` request shape (`max_output_tokens` 4000). Generation requests
+  time out after 120 seconds; task rewrites keep 30 seconds. There is no
+  retry, fallback or generation-model choice.
 - Store each provider's API Key only in macOS Keychain, one item per provider.
   Apple Foundation Models are paused and are not a fallback.
 - Use no third-party dependency or SDK, and no speculative provider
@@ -75,10 +85,19 @@ before any request is made.
   request instead of transforming it). That sentence and the tags are the only
   text ReCraft adds, they are shown where a task prompt is edited, and they
   must not grow into per-task or per-type rules. The only
-  user-controlled remote text is that saved task prompt and selected source.
-  For both providers, never send task names, shortcuts, unselected text,
-  surrounding content, clipboard snapshots, or prior requests, and never log,
-  persist, hash, or otherwise analyze production selected text or model output.
+  user-controlled remote text is that saved task prompt and selected source,
+  plus the description typed in the task editor's generation field, which is
+  sent only when the user explicitly clicks Generate Prompt, together with the
+  fixed generation instructions (`TaskPromptGeneration.instructions`) and
+  nothing else. For both providers, never send task names, saved prompts,
+  shortcuts, selected or unselected text, surrounding content, clipboard
+  snapshots, or prior requests in a generation request; never send task names,
+  shortcuts, unselected text, surrounding content, clipboard snapshots, or
+  prior requests in a rewrite request; and never log, persist, hash, or
+  otherwise analyze production rewrite selected text or rewrite model output.
+  A generated name and prompt are parsed and placed in the draft only; they
+  are stored, as plaintext task configuration, only when the user clicks Save,
+  and from then on they are the user's task prompt. They must never be logged.
 - Each model invocation is one independent request to the selected provider
   only: for OpenAI a Responses API request with `store=false`, for Claude a
   single Messages API request; both have no tools and no conversation history.
@@ -99,11 +118,13 @@ before any request is made.
   copy and upload the current line, so that configuration is outside the remote
   support claim.
 - Logs may contain only app identifiers, element role/subrole, processing
-  stage, provider name (log categories `OpenAI` and `Claude`), duration,
+  stage, provider name (log categories `OpenAI`, `Claude` and `Generator`), duration,
   attempt counts, Accessibility error codes and error category. They must never contain user text, prompts, responses, or full
   control values.
 - Production text inspection and remote work begin only after an explicit
-  registered shortcut. The Debug-only `DebugFocusProbe` may sample
+  registered shortcut. The one exception is a task prompt generation request,
+  which is triggered by an explicit Generate Prompt click in Settings and does
+  not read the focus, a selection or the pasteboard. The Debug-only `DebugFocusProbe` may sample
   Accessibility metadata or post a synthetic shortcut for unattended tests; it
   must stay compiled out of Release and must never read values, selections or
   the pasteboard.
@@ -114,12 +135,16 @@ before any request is made.
 
 Each task contains its full editable prompt; apart from the single fixed
 Claude source-framing sentence above there is no shared base, automatic
-classification, hidden name/ID/type rule or extra model call is admitted.
-Existing user prompts must not be silently overwritten.
+classification, hidden name/ID/type rule or extra model call when a task is
+invoked is admitted. Task prompt generation is a separate call that only the
+user starts from Settings; it is never part of a task invocation.
+Existing user prompts must not be silently overwritten: generation replaces a
+non-blank draft prompt only after the user confirms, never overwrites edits
+made while it was waiting, and never saves.
 
 Do not add chat, history, accounts, teams, cloud sync, RAG, prompt marketplaces,
 task-library categories/search/import/export, providers or models other than
-the two fixed above,
+the two fixed rewrite models and the one fixed Claude generation model above,
 app adapters, databases, telemetry, launch-at-login, auto-update, public
 distribution, or broader OS/device support in the current scope. Do not
 generalize prompt and shortcut editing into a prompt library, scripting system,

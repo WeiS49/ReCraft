@@ -42,30 +42,67 @@ final class RewriteTaskSettingsModel: ObservableObject {
     @Published private(set) var state: State = .ready
     @Published private(set) var persistedCatalog: RewriteTaskCatalog?
     @Published private(set) var draftCatalog: RewriteTaskCatalog?
-    @Published var selectedTaskID: UUID?
+    @Published var selectedTaskID: UUID? {
+        didSet {
+            // A different selection makes an in-flight generation result stale.
+            if oldValue != selectedTaskID {
+                invalidatePromptGeneration()
+            }
+        }
+    }
     @Published private(set) var fieldErrors: [UUID: RewriteTaskSettingsFieldErrors] = [:]
     @Published private(set) var statusMessage: String?
     @Published private(set) var isSaving = false
     @Published private(set) var recordingTaskID: UUID?
+
+    /// Prompt generation state. It is separate from `statusMessage`, which
+    /// draft edits clear and which reads unknown text as a failure.
+    struct PromptGenerationNotice: Equatable {
+        enum Tone: Equatable {
+            case success
+            case failure
+        }
+
+        let message: String
+        let tone: Tone
+    }
+
+    static let newTaskName = "New Task"
+    static let promptGeneratedMessage =
+        "Prompt generated — review it, record a shortcut, then save"
+    static let promptGenerationDraftChangedMessage =
+        "The draft was edited while generating, so the generated result was not applied."
+
+    /// The description typed for prompt generation. Memory only: kept across
+    /// task switches, cleared when the Settings window closes.
+    @Published var generationDescription = ""
+    @Published private(set) var isGeneratingPrompt = false
+    @Published private(set) var promptGenerationNotice: PromptGenerationNotice?
 
     var onRuntimeStateChange: (@MainActor () -> Void)?
 
     private let persistence: RewriteTaskCatalogPersistence
     private let activator: any RewriteTaskCatalogActivating
     private let shortcutRecorder: any RewriteTaskShortcutRecording
+    private let promptGenerator: TaskPromptGenerator
     private var unavailableTaskIDs: Set<UUID> = []
     private var shortcutCaptureErrors: [UUID: String] = [:]
     private var activationErrors: [UUID: String] = [:]
+    /// Incremented by everything that makes an in-flight result stale.
+    private var promptGenerationEpoch = 0
+    private var promptGenerationTaskID: UUID?
 
     init(
         persistence: RewriteTaskCatalogPersistence,
         activator: any RewriteTaskCatalogActivating,
         shortcutRecorder: any RewriteTaskShortcutRecording,
+        promptGenerator: TaskPromptGenerator = TaskPromptGenerator(),
         loadImmediately: Bool = true
     ) {
         self.persistence = persistence
         self.activator = activator
         self.shortcutRecorder = shortcutRecorder
+        self.promptGenerator = promptGenerator
 
         if loadImmediately {
             load()
@@ -123,6 +160,7 @@ final class RewriteTaskSettingsModel: ObservableObject {
     }
 
     func load() {
+        invalidatePromptGeneration()
         endShortcutRecording()
         shortcutCaptureErrors = [:]
         activationErrors = [:]
@@ -173,7 +211,7 @@ final class RewriteTaskSettingsModel: ObservableObject {
 
         let task = RewriteTask(
             id: UUID(),
-            name: "New Task",
+            name: Self.newTaskName,
             prompt: "",
             shortcut: HotKeyBinding(virtualKey: UInt32.max, modifiers: 0)
         )
@@ -199,6 +237,9 @@ final class RewriteTaskSettingsModel: ObservableObject {
             return
         }
 
+        if promptGenerationTaskID == taskID {
+            invalidatePromptGeneration()
+        }
         catalog.tasks.remove(at: index)
         draftCatalog = catalog
         shortcutCaptureErrors[taskID] = nil
@@ -270,6 +311,7 @@ final class RewriteTaskSettingsModel: ObservableObject {
     }
 
     func cancel() {
+        invalidatePromptGeneration()
         guard state == .ready, let persistedCatalog else { return }
         endShortcutRecording()
 
@@ -291,10 +333,13 @@ final class RewriteTaskSettingsModel: ObservableObject {
     func settingsWindowDidClose() {
         endShortcutRecording()
         cancel()
+        invalidatePromptGeneration()
+        generationDescription = ""
     }
 
     func resetAfterUserConfirmation() {
         guard state == .recovery else { return }
+        invalidatePromptGeneration()
 
         let preparedReset: RewriteTaskCatalogPersistence.PreparedSave
         do {
@@ -358,6 +403,103 @@ final class RewriteTaskSettingsModel: ObservableObject {
         guard recordingTaskID == taskID else { return }
         shortcutCaptureErrors[taskID] = message
         refreshFieldErrors()
+    }
+
+    // MARK: - Prompt generation
+
+    var canGeneratePrompt: Bool {
+        state == .ready
+            && selectedTask != nil
+            && !isGeneratingPrompt
+            && generationDescription.contains { !$0.isWhitespace }
+    }
+
+    /// True when generating would replace a non-blank draft prompt; the view
+    /// must then confirm before calling `generatePrompt(confirmedReplacement: true)`.
+    var promptGenerationRequiresConfirmation: Bool {
+        selectedTask?.prompt.contains { !$0.isWhitespace } ?? false
+    }
+
+    /// Sends the description, and only the description, to the generator and
+    /// writes the result into the selected task's draft through the normal
+    /// draft update path. Nothing is saved or registered.
+    func generatePrompt(confirmedReplacement: Bool = false) async {
+        guard canGeneratePrompt, let task = selectedTask else { return }
+        // The confirmation happens before any request.
+        guard confirmedReplacement || !promptGenerationRequiresConfirmation else {
+            return
+        }
+
+        let description = generationDescription
+        let taskID = task.id
+        let startName = task.name
+        let startPrompt = task.prompt
+        let replacesName = confirmedReplacement
+            || startName == Self.newTaskName
+            || !startName.contains { !$0.isWhitespace }
+
+        promptGenerationEpoch += 1
+        let epoch = promptGenerationEpoch
+        promptGenerationTaskID = taskID
+        promptGenerationNotice = nil
+        isGeneratingPrompt = true
+        defer {
+            isGeneratingPrompt = false
+            if epoch == promptGenerationEpoch {
+                promptGenerationTaskID = nil
+            }
+        }
+
+        let result: Result<GeneratedTaskPrompt, TaskPromptGenerationError>
+        do {
+            result = .success(try await promptGenerator.generate(description: description))
+        } catch let error as TaskPromptGenerationError {
+            result = .failure(error)
+        } catch {
+            result = .failure(.apiFailure)
+        }
+
+        guard epoch == promptGenerationEpoch,
+              state == .ready,
+              selectedTaskID == taskID,
+              let current = draftCatalog?.tasks.first(where: { $0.id == taskID }) else {
+            return
+        }
+
+        switch result {
+        case let .failure(error):
+            promptGenerationNotice = PromptGenerationNotice(
+                message: error.message,
+                tone: .failure
+            )
+
+        case let .success(generated):
+            // Never overwrite edits made while waiting.
+            guard ExactText.matches(current.name, startName),
+                  ExactText.matches(current.prompt, startPrompt) else {
+                promptGenerationNotice = PromptGenerationNotice(
+                    message: Self.promptGenerationDraftChangedMessage,
+                    tone: .failure
+                )
+                return
+            }
+            updateSelectedTask { task in
+                if replacesName {
+                    task.name = generated.name
+                }
+                task.prompt = generated.prompt
+            }
+            promptGenerationNotice = PromptGenerationNotice(
+                message: Self.promptGeneratedMessage,
+                tone: .success
+            )
+        }
+    }
+
+    private func invalidatePromptGeneration() {
+        promptGenerationEpoch += 1
+        promptGenerationTaskID = nil
+        promptGenerationNotice = nil
     }
 
     func isTaskModified(_ taskID: UUID) -> Bool {
