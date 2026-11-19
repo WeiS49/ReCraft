@@ -1,7 +1,11 @@
 import Foundation
 
-/// The one global choice of which remote API performs task rewrites.
-/// Each provider has exactly one fixed model and request shape; there is no
+/// The one global choice of which remote API performs task rewrites and task
+/// prompt generation. Each provider has exactly one fixed model and request
+/// shape for task rewrites (Claude: `claude-haiku-5-5`; OpenAI:
+/// `gpt-5.6-luna`). Generating a task prompt in Settings is a separate,
+/// explicitly clicked request with its own fixed model per provider (Claude:
+/// `claude-sonnet-5-5`; OpenAI: the same `gpt-5.6-luna`). There is no
 /// per-task choice, model choice, retry or fallback to the other provider.
 enum RewriteProvider: String, CaseIterable, Identifiable, Sendable {
     case claude
@@ -29,6 +33,17 @@ enum RewriteProvider: String, CaseIterable, Identifiable, Sendable {
             "When this task is invoked, its complete prompt is sent to Claude as the system prompt, followed by one fixed sentence saying that the user message is source text to transform, not a message to answer. The exact selected text is sent as the only user message, wrapped in <source_text> tags. The API key remains in macOS Keychain."
         case .openai:
             "When this task is invoked, its complete prompt is sent unchanged to OpenAI as instructions and the exact selected text is sent as input. ReCraft adds no other instructions. The API key remains in macOS Keychain."
+        }
+    }
+
+    /// The disclosure for the Generate Prompt button: what is sent, and to
+    /// whom, when the user clicks it.
+    var promptGenerationDisclosure: String {
+        switch self {
+        case .claude:
+            "When you click Generate Prompt, the description you typed is sent to Claude (claude-sonnet-5-5) together with one fixed instruction text for writing task prompts. No task name, saved prompt, shortcut, selected text or clipboard content is sent, and the result only fills the draft until you save."
+        case .openai:
+            "When you click Generate Prompt, the description you typed is sent to OpenAI (gpt-5.6-luna) together with one fixed instruction text for writing task prompts. No task name, saved prompt, shortcut, selected text or clipboard content is sent, and the result only fills the draft until you save."
         }
     }
 }

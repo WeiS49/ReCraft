@@ -11,6 +11,9 @@
 		B1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift */; };
 		B1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift */; };
 		B1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F5 /* TaskPromptGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F5 /* TaskPromptGenerator.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F6 /* TaskPromptGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F6 /* TaskPromptGeneratorTests.swift */; };
+		B1C1A0D0E0F0A1B2C3D4E5F7 /* TaskPromptGenerationSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C1A0D0E0F0A1B2C3D4E5F7 /* TaskPromptGenerationSettingsTests.swift */; };
 		050A5E86C10C2BE2E3DD2927 /* KeychainAPIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D55708CF4E3A12F935D177F /* KeychainAPIKeyStore.swift */; };
 		1666CC185074F81E604D8F49 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21F25385AF8C916CA2352E47 /* Security.framework */; };
 		18352FE3B5DF47914DC79DD5 /* PasteDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12588768C5A50D752EB03AB8 /* PasteDelivery.swift */; };
@@ -58,6 +61,9 @@
 		A1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteProvider.swift; sourceTree = "<group>"; };
 		A1C1A0D0E0F0A1B2C3D4E5F3 /* AnthropicMessagesClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicMessagesClientTests.swift; sourceTree = "<group>"; };
 		A1C1A0D0E0F0A1B2C3D4E5F4 /* RewriteProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteProviderTests.swift; sourceTree = "<group>"; };
+		A1C1A0D0E0F0A1B2C3D4E5F5 /* TaskPromptGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPromptGenerator.swift; sourceTree = "<group>"; };
+		A1C1A0D0E0F0A1B2C3D4E5F6 /* TaskPromptGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPromptGeneratorTests.swift; sourceTree = "<group>"; };
+		A1C1A0D0E0F0A1B2C3D4E5F7 /* TaskPromptGenerationSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPromptGenerationSettingsTests.swift; sourceTree = "<group>"; };
 		0EBD0366483A8AAC922C6E9B /* TaskOnlyRewriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOnlyRewriteTests.swift; sourceTree = "<group>"; };
 		0F67FB7CBE3D997BD38CD151 /* AccessibilityPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPermission.swift; sourceTree = "<group>"; };
 		12588768C5A50D752EB03AB8 /* PasteDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteDelivery.swift; sourceTree = "<group>"; };
@@ -119,6 +125,8 @@
 				4AA22110AB15323EF1DC4900 /* RewriteTaskSettingsTests.swift */,
 				DFB3CEBF40E9CAE69F723AA2 /* TaskOnlyHostIsolationTests.swift */,
 				0EBD0366483A8AAC922C6E9B /* TaskOnlyRewriteTests.swift */,
+				A1C1A0D0E0F0A1B2C3D4E5F7 /* TaskPromptGenerationSettingsTests.swift */,
+				A1C1A0D0E0F0A1B2C3D4E5F6 /* TaskPromptGeneratorTests.swift */,
 			);
 			path = ReCraftTests;
 			sourceTree = "<group>";
@@ -157,6 +165,7 @@
 				5E81995B639FE798FC2905FC /* RewriteTaskSettings.swift */,
 				3A16FF56B2E4D404A299E5A3 /* RewriteTaskSettingsView.swift */,
 				C1578800C0E891D8A1A92072 /* ShortcutRecorder.swift */,
+				A1C1A0D0E0F0A1B2C3D4E5F5 /* TaskPromptGenerator.swift */,
 			);
 			path = ReCraft;
 			sourceTree = "<group>";
@@ -280,6 +289,8 @@
 				67B2BE21F4680CAB6015C954 /* RewriteTaskSettingsTests.swift in Sources */,
 				D32ADEF7C9687AA7BF799ABF /* TaskOnlyHostIsolationTests.swift in Sources */,
 				3DF13FB67ABEF830C6C258D9 /* TaskOnlyRewriteTests.swift in Sources */,
+				B1C1A0D0E0F0A1B2C3D4E5F7 /* TaskPromptGenerationSettingsTests.swift in Sources */,
+				B1C1A0D0E0F0A1B2C3D4E5F6 /* TaskPromptGeneratorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +302,7 @@
 				5F470849BA20843F58251980 /* AccessibilityPermission.swift in Sources */,
 				B1C1A0D0E0F0A1B2C3D4E5F1 /* AnthropicMessagesClient.swift in Sources */,
 				B1C1A0D0E0F0A1B2C3D4E5F2 /* RewriteProvider.swift in Sources */,
+				B1C1A0D0E0F0A1B2C3D4E5F5 /* TaskPromptGenerator.swift in Sources */,
 				714A65F8C66836C674EA868B /* AppCoordinator.swift in Sources */,
 				E7CD3A75C7BC3B742993B8FC /* CodingPromptRewriter.swift in Sources */,
 				B34E3AE999F929A54F59A793 /* DebugFocusProbe.swift in Sources */,

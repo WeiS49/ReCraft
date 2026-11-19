@@ -5,6 +5,7 @@ struct RewriteTaskSettingsView: View {
     @ObservedObject var providerSettings: ProviderAPIKeySettingsModel
     @State private var pendingDeletionTaskID: UUID?
     @State private var isConfirmingReset = false
+    @State private var isConfirmingGeneration = false
 
     var body: some View {
         Group {
@@ -44,6 +45,20 @@ struct RewriteTaskSettingsView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This deletes the stored task configuration and restores the three initial tasks. The API key is not changed.")
+        }
+        .confirmationDialog(
+            "Replace the draft name and prompt?",
+            isPresented: $isConfirmingGeneration,
+            titleVisibility: .visible
+        ) {
+            Button("Generate and Replace") {
+                Task {
+                    await model.generatePrompt(confirmedReplacement: true)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("The generated name and prompt replace this task’s current draft. Nothing is saved until you click Save.")
         }
     }
 
@@ -149,6 +164,8 @@ struct RewriteTaskSettingsView: View {
 
         return Form {
             Section("Task") {
+                promptGenerationArea
+
                 TextField("Name", text: taskNameBinding)
                     .accessibilityLabel("Task name")
                 fieldError(errors.name)
@@ -199,12 +216,67 @@ struct RewriteTaskSettingsView: View {
             Section("Storage and API Use") {
                 Text("Task names and prompts are stored as plaintext in ReCraft’s local preferences. They are not written to diagnostic logs.")
                 Text(providerSettings.selectedProvider.taskPromptDisclosure)
+                Text(providerSettings.selectedProvider.promptGenerationDisclosure)
                 Text("ReCraft checks prompt structure, not the semantic quality of arbitrary user-authored prompts.")
                     .foregroundStyle(.secondary)
             }
             .font(.caption)
         }
         .formStyle(.grouped)
+    }
+
+    private var promptGenerationArea: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Describe the task")
+            TextEditor(text: $model.generationDescription)
+                .font(.body)
+                .frame(minHeight: 54)
+                .padding(4)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(.separator)
+                }
+                .accessibilityLabel("Task description for prompt generation")
+
+            HStack(spacing: 8) {
+                Button("Generate Prompt") {
+                    requestPromptGeneration()
+                }
+                .disabled(!model.canGeneratePrompt)
+
+                if model.isGeneratingPrompt {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Generating…")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            if let notice = model.promptGenerationNotice {
+                switch notice.tone {
+                case .success:
+                    Text(notice.message)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel("Prompt generation: \(notice.message)")
+                case .failure:
+                    Text(notice.message)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                        .accessibilityLabel("Prompt generation error: \(notice.message)")
+                }
+            }
+        }
+    }
+
+    private func requestPromptGeneration() {
+        if model.promptGenerationRequiresConfirmation {
+            isConfirmingGeneration = true
+        } else {
+            Task {
+                await model.generatePrompt()
+            }
+        }
     }
 
     private var footer: some View {

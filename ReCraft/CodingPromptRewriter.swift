@@ -13,16 +13,30 @@ final class NoRedirectSessionDelegate: NSObject, URLSessionTaskDelegate, @unchec
     }
 }
 
+/// Builds the ephemeral, cache-free, cookie-free, no-redirect sessions used by
+/// both providers. Task rewrites use the 30-second default; only task prompt
+/// generation passes its own longer timeout.
 enum OpenAISessionFactory {
-    static func makeSession() -> URLSession {
+    static let rewriteTimeout: TimeInterval = 30
+
+    static func makeConfiguration(
+        timeout: TimeInterval = rewriteTimeout
+    ) -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
         configuration.urlCache = nil
         configuration.httpCookieStorage = nil
         configuration.httpShouldSetCookies = false
         configuration.waitsForConnectivity = false
-        configuration.timeoutIntervalForRequest = 30
-        configuration.timeoutIntervalForResource = 30
+        configuration.timeoutIntervalForRequest = timeout
+        configuration.timeoutIntervalForResource = timeout
+        return configuration
+    }
+
+    static func makeSession(
+        timeout: TimeInterval = rewriteTimeout
+    ) -> URLSession {
+        let configuration = makeConfiguration(timeout: timeout)
         return URLSession(
             configuration: configuration,
             delegate: NoRedirectSessionDelegate(),
@@ -59,6 +73,7 @@ struct OpenAIResponsesClient: Sendable {
 
     static let model = "gpt-5.6-luna"
     static let endpoint = URL(string: "https://api.openai.com/v1/responses")!
+    static let maxOutputTokens = 2_400
 
     private static let logger = Logger(
         subsystem: "com.weis49.ReCraft",
@@ -133,10 +148,14 @@ struct OpenAIResponsesClient: Sendable {
         }
     }
 
+    /// The task rewrite request. Task prompt generation reuses the same shape
+    /// with its own instructions, input, output limit and timeout.
     static func makeRequest(
         selectedText: String,
         instructions: String,
-        apiKey: String
+        apiKey: String,
+        maxOutputTokens: Int = OpenAIResponsesClient.maxOutputTokens,
+        timeoutInterval: TimeInterval = OpenAISessionFactory.rewriteTimeout
     ) throws -> URLRequest {
         let normalizedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalizedKey.isEmpty else {
@@ -146,7 +165,7 @@ struct OpenAIResponsesClient: Sendable {
         var request = URLRequest(
             url: endpoint,
             cachePolicy: .reloadIgnoringLocalCacheData,
-            timeoutInterval: 30
+            timeoutInterval: timeoutInterval
         )
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -157,7 +176,8 @@ struct OpenAIResponsesClient: Sendable {
         request.httpBody = try JSONEncoder().encode(
             RequestBody(
                 selectedText: selectedText,
-                instructions: instructions
+                instructions: instructions,
+                maxOutputTokens: maxOutputTokens
             )
         )
         return request
@@ -220,13 +240,14 @@ struct OpenAIResponsesClient: Sendable {
         let reasoning = Reasoning()
         let text = TextConfiguration()
         let tools: [Tool] = []
-        let maxOutputTokens = 2_400
+        let maxOutputTokens: Int
         let serviceTier = "default"
         let truncation = "disabled"
 
-        init(selectedText: String, instructions: String) {
+        init(selectedText: String, instructions: String, maxOutputTokens: Int) {
             self.instructions = instructions
             input = [InputMessage(selectedText: selectedText)]
+            self.maxOutputTokens = maxOutputTokens
         }
 
         enum CodingKeys: String, CodingKey {

@@ -102,7 +102,7 @@ It admits one narrow configuration model:
 - one full, editable prompt per task, sent without a shared base (the one
   exception is the fixed Claude source-framing sentence recorded in
   `AGENTS.md`), classifier,
-  hidden task-type rule or extra model call; and
+  hidden task-type rule or extra model call when the task is invoked; and
 - a fresh single-policy default/compatibility/holdout acceptance gate and the
   remaining installed-App checks before this feature is considered complete.
 
@@ -117,7 +117,17 @@ retrospectively declared a production pass.
 
 This decision supersedes the earlier plan for a separate fixed-English action.
 It does not admit a prompt marketplace, task-library organization, model or
-provider selection, history, sync, or another delivery mechanism.
+provider selection (beyond the provider decision below), history, sync, or
+another delivery mechanism.
+
+Task prompt generation (owner decision 2026-11-19): in the task editor the
+user may describe a rewrite in a sentence or two and click Generate Prompt to
+have the selected provider write a task name and complete prompt into the
+selected task's draft only. It creates new prompts only (it never sends or
+revises the existing prompt), uses `claude-sonnet-5-5` for Claude and the
+existing `gpt-5.6-luna` for OpenAI, and never saves or assigns a shortcut
+automatically. `AGENTS.md` records the exact request, privacy and overwrite
+rules.
 
 ### Provider decision (2026-11-19)
 

@@ -34,6 +34,8 @@ ReCraft appears in the menu bar without a main window. Check Accessibility statu
 
 In **Settings… → Rewrite Tasks**, select a task or **Add Task**, edit its name, complete prompt and shortcut, then **Save**. Shortcuts use A–Z with at least two modifiers; reserved or conflicting shortcuts are rejected. Tasks run directly from their shortcuts without a picker.
 
+To write a task from a short description, select a task (use **Add Task** first for a new one), type what the rewrite should do under **Describe the task**, and click **Generate Prompt**. The model's task name and complete prompt fill only the selected task's draft: review them, record a shortcut, then **Save**. Generating over a non-empty prompt asks for confirmation first, and nothing is saved or registered automatically.
+
 | Initial shortcut | Action |
 | --- | --- |
 | Control-Option-Command-P | Coding Agent Prompt |
@@ -56,6 +58,14 @@ message to answer, and the selection is the only user message, wrapped in
 `<source_text>` tags; to OpenAI
 (`api.openai.com/v1/responses`) they are `instructions` and input, with
 `store=false`.
+
+**Generate Prompt** is a separate request sent only when you click it: the
+description you typed, wrapped in `<task_description>` tags, plus one fixed
+generation instruction text go to the selected provider (Claude:
+`claude-sonnet-5-5`; OpenAI: `gpt-5.6-luna`). It never contains task names,
+saved prompts, shortcuts, selected text or clipboard content, and it does not
+read the focused control or the pasteboard. The description stays in memory
+only.
 
 Before delivery, it rechecks the original application and focused control, recopies the selection and requires an exact match. It pastes once and restores the prior clipboard only while it still owns the staged content. `Replacement sent` confirms event submission; actual replacement and Undo need visible verification.
 
