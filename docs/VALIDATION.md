@@ -42,11 +42,19 @@ sent. Through the real `makeRequest` path with the changed code:
 
 `./check`: 141 tests executed, 0 failures; Release build and packaging ok.
 
-Boundary: 13 paid calls in total, one or two runs per case, so this shows the
-failure class is addressed, not a measured success rate. Not rerun: the
-shortcut end to end in Notes (computer control was not granted), other saved
-tasks, and the OpenAI path, which sends the prompt as `instructions` and was
-not tested with a long selection. Each Claude request now carries the task
+End to end: the Release build of this branch, signed with the same identity
+as the installed copy (identical designated requirement, so the
+Accessibility grant and Keychain access carried over), replaced the installed
+0.3.0. In a new Notes test note holding the same posting, a synthetic
+Control-Option-Command-C ran the owner's saved Chinese-translation task:
+one request, 7.1 s, "Replacement sent", clipboard restored, and the whole
+note, from the first paragraph to the final English paragraphs, became
+Chinese with the emoji headings and list items in place. **Exact success.**
+
+Boundary: 14 paid calls in total, one or two runs per case, so this shows the
+failure class is addressed, not a measured success rate. Not rerun: other
+saved tasks, a physical-keyboard press, and the OpenAI path, which sends the
+prompt as `instructions` and was not tested with a long selection. Each Claude request now carries the task
 prompt twice, which adds its length to the input tokens.
 
 ## Target-recognition fix — 2026-11-18
