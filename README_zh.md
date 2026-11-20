@@ -2,7 +2,15 @@
 
 ReCraft 是一个个人使用的 macOS 菜单栏小工具：在支持的可编辑控件里选中文字，按下任务快捷键，选区会被改写结果原地替换。英文版说明见 [README.md](README.md)。
 
-![在 TextEdit 里选中一句话，按快捷键后被 ReCraft 原地改写](docs/demo.gif)
+**原地翻译。** 一段英文被改写成正式的法语：
+
+![在 TextEdit 里选中一段英文，按快捷键后被 ReCraft 原地改写成正式法语](docs/demo-french.gif)
+
+**把一句模糊的需求改写成给 Coding Agent 的任务说明。** 一句话变成任务、前提假设和待确认的问题：
+
+![在 TextEdit 里选中一句需求，按快捷键后被 ReCraft 改写成结构化的任务说明](docs/demo-coding-prompt.gif)
+
+两个演示用的是我自己写的任务提示词，与内置提示词不同。
 
 ## 安装
 
