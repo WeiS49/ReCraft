@@ -24,6 +24,42 @@ The 2026-11-18 target-recognition fix is documented in
 The quality of the built-in default prompts has **not** passed the project's
 own acceptance gate; treat them as starting points to edit.
 
+## Install
+
+Requirements: an Apple Silicon Mac running macOS 26 or later, and your own
+Claude or OpenAI API key. ReCraft has no bundled key and no free tier.
+
+1. Download `ReCraft-<version>.zip` from the
+   [latest release](https://github.com/WeiS49/ReCraft/releases/latest), unzip
+   it and move `ReCraft.app` to `/Applications`.
+2. Open it. Release builds are ad-hoc signed and **not notarized by Apple**,
+   so macOS blocks the first launch. Go to **System Settings → Privacy &
+   Security**, scroll down and click **Open Anyway**. Alternatively, clear the
+   download flag yourself:
+
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/ReCraft.app
+   ```
+
+3. Grant Accessibility when ReCraft asks for it (**System Settings → Privacy &
+   Security → Accessibility**).
+4. Enter your API key under **Settings… → API Key**.
+
+Updating: an ad-hoc signed app has no stable signing identity, so macOS treats
+every new release as a different application. After replacing the app, remove
+the old ReCraft entry from the Accessibility list and add it again; macOS may
+also ask before the new build can read the saved API key, or you may have to
+enter the key again. Saved rewrite tasks are kept. To avoid this, build from
+source with your own development team (see `Config/Local.xcconfig.example`).
+
+Each release also carries a `.sha256` file; verify the download with
+`shasum -a 256 -c ReCraft-<version>.zip.sha256`.
+
+Maintainers publish a release by pushing a tag that matches the app version,
+for example `git tag v0.3.0 && git push origin v0.3.0`. The workflow runs
+`./check`, then `scripts/package-release.sh`, and refuses a tag that does not
+match `MARKETING_VERSION`.
+
 ## Run and configure
 
 ```bash
@@ -110,7 +146,7 @@ approved Accessibility workflow.
 - In Codex, avoid selecting the trailing paragraph break.
 - VS Code remote use requires `"editor.emptySelectionClipboard": false`.
 - Evidence covers one user and one Apple Silicon Mac. This is a personal
-  development preview, not a notarized release.
+  development preview; release builds are not notarized.
 
 See [product principles](docs/PRODUCT_PRINCIPLES.md) and the
 [validation record](docs/VALIDATION.md).

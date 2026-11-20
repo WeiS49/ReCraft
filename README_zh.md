@@ -2,6 +2,26 @@
 
 ReCraft 是一个个人使用的 macOS 菜单栏小工具：在支持的可编辑控件里选中文字，按下任务快捷键，选区会被改写结果原地替换。英文版说明见 [README.md](README.md)。
 
+## 安装
+
+要求：Apple Silicon Mac，macOS 26 或更高版本，以及你自己的 Claude 或 OpenAI API Key。ReCraft 不内置 Key，也没有免费额度。
+
+1. 从[最新发布](https://github.com/WeiS49/ReCraft/releases/latest)下载 `ReCraft-<版本>.zip`，解压后把 `ReCraft.app` 拖进 `/Applications`。
+2. 打开它。发布版是临时签名（ad-hoc），**没有经过 Apple 公证**，所以第一次打开会被 macOS 拦住。到 **系统设置 → 隐私与安全性**，滚到下方点 **仍要打开**。也可以自己清除下载标记：
+
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/ReCraft.app
+   ```
+
+3. 按提示授予辅助功能权限（**系统设置 → 隐私与安全性 → 辅助功能**）。
+4. 在 **Settings… → API Key** 里填入 API Key。
+
+升级：临时签名的应用没有稳定的签名身份，macOS 会把每个新版本当成另一个应用。替换应用后，需要在辅助功能列表里删掉旧的 ReCraft 条目再重新添加；读取已保存的 API Key 时系统可能会先询问，也可能需要重新填一次。已保存的改写任务会保留。想避免这些，可以用自己的开发团队从源码构建（见 `Config/Local.xcconfig.example`）。
+
+每个发布还附带一个 `.sha256` 文件，可用 `shasum -a 256 -c ReCraft-<版本>.zip.sha256` 校验下载。
+
+维护者发布新版本的方法是推送一个与应用版本一致的 tag，例如 `git tag v0.3.0 && git push origin v0.3.0`。发布流程先跑 `./check`，再跑 `scripts/package-release.sh`；tag 与 `MARKETING_VERSION` 不一致时会拒绝发布。
+
 ## 使用
 
 ```bash

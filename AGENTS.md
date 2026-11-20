@@ -145,8 +145,13 @@ made while it was waiting, and never saves.
 Do not add chat, history, accounts, teams, cloud sync, RAG, prompt marketplaces,
 task-library categories/search/import/export, providers or models other than
 the two fixed rewrite models and the one fixed Claude generation model above,
-app adapters, databases, telemetry, launch-at-login, auto-update, public
-distribution, or broader OS/device support in the current scope. Do not
+app adapters, databases, telemetry, launch-at-login, auto-update, or broader
+OS/device support in the current scope. Public distribution is admitted in one
+form only: pushing a tag `v<version>` runs `.github/workflows/release.yml`,
+which publishes the ad-hoc signed, un-notarized zip built by
+`scripts/package-release.sh` as a GitHub release. Developer ID signing,
+notarization, installers, package managers and the Mac App Store need a new
+decision. Do not
 generalize prompt and shortcut editing into a prompt library, scripting system,
 or provider layer.
 
