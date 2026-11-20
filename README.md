@@ -1,28 +1,27 @@
 # ReCraft
 
-ReCraft is a personal macOS menu-bar utility: select text, press a task shortcut, and replace the selection with a rewrite.
+Select text in a macOS app, press a global shortcut, and ReCraft replaces the
+selection with an LLM rewrite. It lives in the menu bar and has no main window.
 
-## Status
+![ReCraft rewriting a selected sentence in TextEdit after a shortcut](docs/demo.gif)
 
-Version 0.3.0 (4). Run `./check` before delivering a change: it runs the full
-offline XCTest suite and a Release build with ad-hoc signing. No test calls
-the network or needs an API key.
+- **One shortcut per task.** Each rewrite task has its own prompt and shortcut.
+  Formal English, Formal French and Coding Agent Prompt are built in; add your
+  own, or let the model draft a prompt from a short description.
+- **Your key, one request.** ReCraft calls Claude or OpenAI with your own API
+  key, stored in the macOS Keychain. Each shortcut sends one request containing
+  only the task prompt and the selected text.
+- **Careful with your Mac.** Accessibility is the only permission. Password
+  fields are refused, the selection is rechecked before pasting, and the
+  previous clipboard is restored.
+- **Native and small.** Swift with SwiftUI and AppKit, no third-party
+  dependencies, and 100+ offline tests.
 
-The 2026-11-18 target-recognition fix is documented in
-[`docs/VALIDATION.md`](docs/VALIDATION.md). In short:
+I built it to tidy the prompts I write for coding agents, and now use it for
+everyday rewriting and translation too. This is a personal development
+preview: see [Limits and evidence](#limits-and-evidence) before relying on it.
 
-- Identifying the shortcut target now retries for up to about half a second
-  when Accessibility momentarily reports no focused application or control,
-  instead of refusing on the first failed read. Revalidation retries failed
-  reads only; a confirmed different application or control still refuses.
-- A control that answers "no value" for the protected-content flag (WeChat's
-  message field does) is no longer treated as an unverifiable secure field.
-  Secure roles and a true protected-content flag are still refused.
-- Every target refusal logs its step, Accessibility error code and attempt
-  count (metadata only) under the `Target` log category.
-
-The quality of the built-in default prompts has **not** passed the project's
-own acceptance gate; treat them as starting points to edit.
+中文说明见 [README_zh.md](README_zh.md).
 
 ## Install
 
@@ -133,6 +132,28 @@ sample focus state or post a synthetic shortcut for unattended runtime tests;
 it is compiled out of Release. The app uses SwiftUI/AppKit, Carbon hotkeys,
 system URLSession and Apple frameworks only. App Sandbox is disabled for the
 approved Accessibility workflow.
+
+## Status and recent changes
+
+Version 0.3.0 (4). Run `./check` before delivering a change: it runs the full
+offline XCTest suite and a Release build with ad-hoc signing. No test calls
+the network or needs an API key.
+
+The 2026-11-18 target-recognition fix is documented in
+[`docs/VALIDATION.md`](docs/VALIDATION.md). In short:
+
+- Identifying the shortcut target now retries for up to about half a second
+  when Accessibility momentarily reports no focused application or control,
+  instead of refusing on the first failed read. Revalidation retries failed
+  reads only; a confirmed different application or control still refuses.
+- A control that answers "no value" for the protected-content flag (WeChat's
+  message field does) is no longer treated as an unverifiable secure field.
+  Secure roles and a true protected-content flag are still refused.
+- Every target refusal logs its step, Accessibility error code and attempt
+  count (metadata only) under the `Target` log category.
+
+The quality of the built-in default prompts has **not** passed the project's
+own acceptance gate; treat them as starting points to edit.
 
 ## Limits and evidence
 

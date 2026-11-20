@@ -2,6 +2,8 @@
 
 ReCraft 是一个个人使用的 macOS 菜单栏小工具：在支持的可编辑控件里选中文字，按下任务快捷键，选区会被改写结果原地替换。英文版说明见 [README.md](README.md)。
 
+![在 TextEdit 里选中一句话，按快捷键后被 ReCraft 原地改写](docs/demo.gif)
+
 ## 安装
 
 要求：Apple Silicon Mac，macOS 26 或更高版本，以及你自己的 Claude 或 OpenAI API Key。ReCraft 不内置 Key，也没有免费额度。
