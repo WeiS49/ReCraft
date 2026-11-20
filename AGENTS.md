@@ -82,8 +82,11 @@ before any request is made.
   (`AnthropicMessagesClient.sourceFraming`), and the only user message is the
   selected text wrapped byte for byte in `<source_text>` tags (owner decision
   2026-11-19: without them Claude answers a selection that reads like a
-  request instead of transforming it). That sentence and the tags are the only
-  text ReCraft adds, they are shown where a task prompt is edited, and they
+  request instead of transforming it), followed by a blank line and the same
+  saved task prompt again (2026-11-20: with a long selection Claude otherwise
+  ignores the system instructions and returns the source almost unchanged).
+  That sentence, the tags and the repeated prompt are the only text ReCraft
+  adds, they are shown where a task prompt is edited, and they
   must not grow into per-task or per-type rules. The only
   user-controlled remote text is that saved task prompt and selected source,
   plus the description typed in the task editor's generation field, which is

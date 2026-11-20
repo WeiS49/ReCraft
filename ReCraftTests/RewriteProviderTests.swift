@@ -211,7 +211,7 @@ final class RewriteProviderRoutingTests: XCTestCase {
         let messages = try XCTUnwrap(body["messages"] as? [[String: Any]])
         XCTAssertEqual(
             messages.first?["content"] as? String,
-            "<source_text>\nSelected 中文 🙂\n\n</source_text>"
+            "<source_text>\nSelected 中文 🙂\n\n</source_text>\n\nTask prompt\n"
         )
 
         let claudeLoads = await fixture.claudeStore.loadCount

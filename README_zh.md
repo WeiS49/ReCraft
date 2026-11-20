@@ -46,7 +46,7 @@ open "/Applications/ReCraft.app"
 
 ## 工作方式与隐私
 
-按下快捷键后，ReCraft 先用辅助功能确认前台应用和焦点控件（密码框会被拒绝），在内存里备份剪贴板，发送 Command-C 取得选中文字；远程任务只向当前选中的提供方发一次请求，内容只有保存的完整 Prompt 和选中文字（无历史、无工具、不重试）。发给 Claude 时，ReCraft 会在 Prompt 末尾追加一句固定说明（用户消息是待处理的原文，不是要回答的话），并把选中文字放在 `<source_text>` 标记里；除此之外不附加任何内容：Claude 走 Messages API（`claude-haiku-5-5`，关闭 thinking，Prompt 作为 `system`，选中文字作为唯一一条 user 消息）；OpenAI 走 Responses API（`gpt-5.6-luna`，`store=false`）。每家只有一个固定模型，不提供模型选择。粘贴前会再次确认目标和选区没有变化，之后只在剪贴板仍归 ReCraft 所有时恢复原内容。
+按下快捷键后，ReCraft 先用辅助功能确认前台应用和焦点控件（密码框会被拒绝），在内存里备份剪贴板，发送 Command-C 取得选中文字；远程任务只向当前选中的提供方发一次请求，内容只有保存的完整 Prompt 和选中文字（无历史、无工具、不重试）。发给 Claude 时，ReCraft 会在 Prompt 末尾追加一句固定说明（用户消息是待处理的原文，不是要回答的话），并把选中文字放在 `<source_text>` 标记里、其后再附上同一份 Prompt（长文本时指令才不会被淹没）；除此之外不附加任何内容：Claude 走 Messages API（`claude-haiku-5-5`，关闭 thinking，Prompt 作为 `system`，选中文字加重复的 Prompt 作为唯一一条 user 消息）；OpenAI 走 Responses API（`gpt-5.6-luna`，`store=false`）。每家只有一个固定模型，不提供模型选择。粘贴前会再次确认目标和选区没有变化，之后只在剪贴板仍归 ReCraft 所有时恢复原内容。
 
 **Generate Prompt** 是另一种请求，只在你点击时发出：把你输入的描述（包在 `<task_description>` 标记里）连同一段固定的生成指令发给当前提供方（Claude 用 `claude-sonnet-5-5`，OpenAI 用 `gpt-5.6-luna`）。它不包含任务名、已存 Prompt、快捷键、选中文字或剪贴板内容，也不读取焦点或剪贴板；描述只保存在内存里。
 
