@@ -59,3 +59,16 @@ if [ -d "$(dirname "$BINARY")/../PlugIns" ] && ls "$(dirname "$BINARY")/../PlugI
   exit 1
 fi
 echo "check: Release build ok, no Debug-only diagnostics in the binary"
+
+# The release entry point is exercised for real: it must package the current
+# version and must refuse a tag that does not match it.
+VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$(dirname "$BINARY")/../Info.plist")"
+if ! "$ROOT/scripts/package-release.sh" "v$VERSION" > /dev/null; then
+  echo "check: scripts/package-release.sh failed to package v$VERSION." >&2
+  exit 1
+fi
+if "$ROOT/scripts/package-release.sh" "v0.0.0-mismatch" > /dev/null 2>&1; then
+  echo "check: scripts/package-release.sh accepted a tag that does not match the app version." >&2
+  exit 1
+fi
+echo "check: release packaging ok for v$VERSION, mismatched tag refused"

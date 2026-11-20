@@ -1,0 +1,39 @@
+name: Release
+
+# Pushing a tag v<version> builds the app with ad-hoc signing and publishes it
+# as a GitHub release. The build is not notarized; the README says how to open it.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run the repo's single check command
+        run: ./check
+
+      - name: Package the app
+        id: package
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          zip="$(./scripts/package-release.sh "$TAG" | tail -1)"
+          echo "zip=$zip" >> "$GITHUB_OUTPUT"
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          ZIP: ${{ steps.package.outputs.zip }}
+        run: |
+          gh release create "$TAG" "$ZIP" "$ZIP.sha256" \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --title "ReCraft $TAG" \
+            --notes-file docs/RELEASE_NOTES_HEADER.md --generate-notes

@@ -379,5 +379,6 @@ demonstrated blocker without crossing the quality floor.
   observation.
 - General rich-text editing, batch processing, streaming replacement, queues,
   plugins, scripting, and extensibility points.
-- Intel support, older macOS support, public distribution, Mac App Store,
-  launch at login, auto-update, and deployment infrastructure.
+- Intel support, older macOS support, Mac App Store, launch at login,
+  auto-update, and distribution beyond the un-notarized GitHub release zip
+  (Developer ID signing, notarization, installers, package managers).
