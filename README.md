@@ -3,7 +3,15 @@
 Select text in a macOS app, press a global shortcut, and ReCraft replaces the
 selection with an LLM rewrite. It lives in the menu bar and has no main window.
 
-![ReCraft rewriting a selected sentence in TextEdit after a shortcut](docs/demo.gif)
+**Translate in place.** An English paragraph becomes formal French:
+
+![ReCraft replacing a selected English paragraph in TextEdit with formal French](docs/demo-french.gif)
+
+**Turn a vague request into a brief for a coding agent.** One sentence becomes a task, its assumptions and the questions still open:
+
+![ReCraft replacing a one-line request in TextEdit with a structured task brief](docs/demo-coding-prompt.gif)
+
+Both demos use tasks with my own prompts; the built-in prompts differ.
 
 - **One shortcut per task.** Each rewrite task has its own prompt and shortcut.
   Formal English, Formal French and Coding Agent Prompt are built in; add your
