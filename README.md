@@ -89,8 +89,8 @@ request, only to the selected provider, containing exactly the saved complete
 task prompt and only the selected text, with no tools, history or retry. To
 Claude (`api.anthropic.com/v1/messages`) the `system` value is the prompt plus
 one fixed sentence saying the user message is source text to transform, not a
-message to answer, and the selection is the only user message, wrapped in
-`<source_text>` tags; to OpenAI
+message to answer, and the user message is the selection wrapped in
+`<source_text>` tags followed by the same prompt again; to OpenAI
 (`api.openai.com/v1/responses`) they are `instructions` and input, with
 `store=false`.
 

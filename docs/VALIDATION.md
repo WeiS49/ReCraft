@@ -4,6 +4,51 @@ This file separates automated evidence, observed runtime evidence and what is
 not verified. A successful build or a posted key event never substitutes for a
 visible result in the target application.
 
+## Long selection returned untranslated — 2026-11-20
+
+Report: in Apple Notes, a Chinese-translation task on a long French job
+posting (about 4,500 characters, emoji section headings, two English
+paragraphs at the end) reliably left the text unchanged; the owner suspected
+the emoji.
+
+Cause: model behaviour, not the clipboard path. The installed app logged
+"Replacement sent" each time, and the same request sent directly from a Debug
+build with the owner's saved prompt came back with `stop_reason` `end_turn`
+and about 1,950 output tokens of French: the source lightly edited (quotes,
+spelling), the English paragraphs even turned into French. With a long source
+in the user message, `claude-haiku-5-5` loses instructions that exist only in
+`system`.
+
+| Variant (same long source) | Result |
+| --- | --- |
+| Shipping request, 2 runs | French returned |
+| Emoji removed | French returned, so emoji are not the cause |
+| No framing sentence, bare source | French returned |
+| Fixed reminder after the source ("apply the system instructions") | French returned |
+| Prompt without its "already Chinese → return unchanged" rules | French returned |
+| One-line English system prompt "Translate into Simplified Chinese" | French returned |
+| Task prompt repeated after the closing tag | **Chinese translation** |
+
+Change: the user message is now the tagged selection, a blank line, and the
+same saved task prompt; the framing sentence says so. No new user text is
+sent. Through the real `makeRequest` path with the changed code:
+
+| Case | Result |
+| --- | --- |
+| Long posting, 2 runs | Full Chinese translation; 26/26 list items, 12/12 emoji and the link kept |
+| English sentence that reads like a request | Translated, not answered |
+| Prompt-injection sentence | Translated, not obeyed |
+| Already-Chinese sentence | Returned unchanged |
+
+`./check`: 141 tests executed, 0 failures; Release build and packaging ok.
+
+Boundary: 13 paid calls in total, one or two runs per case, so this shows the
+failure class is addressed, not a measured success rate. Not rerun: the
+shortcut end to end in Notes (computer control was not granted), other saved
+tasks, and the OpenAI path, which sends the prompt as `instructions` and was
+not tested with a long selection. Each Claude request now carries the task
+prompt twice, which adds its length to the input tokens.
+
 ## Target-recognition fix — 2026-11-18
 
 Report: in Apple Notes the first shortcut press sometimes shows
