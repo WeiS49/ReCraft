@@ -143,7 +143,7 @@ approved Accessibility workflow.
 
 ## Status and recent changes
 
-Version 0.3.0 (4). Run `./check` before delivering a change: it runs the full
+Version 0.3.1 (5). Run `./check` before delivering a change: it runs the full
 offline XCTest suite and a Release build with ad-hoc signing. No test calls
 the network or needs an API key.
 

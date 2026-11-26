@@ -4,6 +4,20 @@ This file separates automated evidence, observed runtime evidence and what is
 not verified. A successful build or a posted key event never substitutes for a
 visible result in the target application.
 
+## Release 0.3.1 — 2026-11-26
+
+Version 0.3.1 (5) changes only the version number. It exists because the
+v0.3.0 release was tagged before the long-selection fix below was merged, so
+the published download did not contain it.
+
+- `./check` on macOS 27.2.1: 141 tests executed, 0 failures; Release build and
+  packaging ok for v0.3.1; the ad-hoc signed zip matches its `.sha256`, and
+  the Release binary contains the changed Claude framing sentence.
+- Not verified: the 0.3.1 build was not run in any application, and the
+  downloaded release zip was not opened on a second Mac. The runtime evidence
+  for the fix is the 2026-11-20 record below, taken on a 0.3.0-numbered build
+  of the same source.
+
 ## Long selection returned untranslated — 2026-11-20
 
 Report: in Apple Notes, a Chinese-translation task on a long French job
